@@ -10,27 +10,50 @@ use Symfony\Component\Security\Core\User\UserInterface;
 */
 class Users implements UserInterface{
 	/** @ORM\Column(type="integer")
-	* 	@ORM\Id
+	* 	@ORM\code
 	*   @ORM\GeneratedValue
 	*/
 	private $cod;
 	/** @ORM\Column(type="string")*/
-	private $username;
+	private $name;
+	/** @ORM\Column(type="string")*/	
+	private $surname;
+	/** @ORM\Column(type="string")*/
+	private $email;
 	/** @ORM\Column(type="string")*/	
 	private $password;
+	/** @ORM\Column(type="string")*/	
+	private $address;
+	/** @ORM\Column(type="string")*/	
+	private $username;
+	/** @ORM\Column(type="string")*/	
+	private $picture;
 	/** @ORM\Column(type="integer")*/
 	private $role;
-
-
 
 	public function getCod(){
 		return $this->cod;
 	}
-	public function getUsername(){
-		return $this->username;
+	public function getName(){
+		return $this->name;
+	}
+	public function getSurname(){
+		return $this->surname;
+	}
+	public function getEmail(){
+		return $this->email;
 	}
 	public function getPassword(){
 		return $this->password;
+	}
+	public function getAddress(){
+		return $this->address;
+	}
+	public function getUsername(){
+		return $this->username;
+	}
+	public function getPicture(){
+		return $this->picture;
 	}
 	public function getRoles()  {
         if ($this->role==0) {
@@ -40,11 +63,26 @@ class Users implements UserInterface{
         }
     }
 
-	public function setUsername($username){
-		$this->username = $username;
+	public function setName($name){
+		$this->name = $name;
+	}
+	public function setSurname($surname){
+		$this->surname = $surname;
+	}
+	public function setEmail($email){
+		$this->email = $email;
 	}
 	public function setPassword($password){
 		$this->password = $password;
+	}
+	public function setAddress($address){
+		$this->address = $address;
+	}
+	public function setUsername($username){
+		$this->username = $username;
+	}
+	public function setPicture($picture){
+		$this->picture = $picture;
 	}
 	public function setRole($role){
 		$this->role = $role;
