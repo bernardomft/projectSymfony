@@ -13,7 +13,7 @@ class Users implements UserInterface{
 	/**
      * @var int
      *
-     * @ORM\Column(name="CodRes", type="integer", nullable=false)
+     * @ORM\Column(name="code", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
