@@ -9,10 +9,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="users")
 */
 class Users implements UserInterface{
-	/** @ORM\Column(type="integer")
-	* 	@ORM\code
-	*   @ORM\GeneratedValue
-	*/
+
+	/**
+     * @var int
+     *
+     * @ORM\Column(name="CodRes", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
 	private $cod;
 	/** @ORM\Column(type="string")*/
 	private $name;
