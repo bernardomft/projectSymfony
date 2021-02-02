@@ -18,13 +18,14 @@ class MainControler extends AbstractController{
      */
 	 public function main(){
         /*$entityManager = $this->getDoctrine()->getManager();
-		$eq = $entityManager->find(Users::class, 4);
-		$username = $eq->getUsername();
+		    $eq = $entityManager->find(Users::class, 4);
+		    $username = $eq->getUsername();
         return new Response('<html><body>'. $username.'</body></html>');
         */
         $tmp = $this->getUser();
         $tmp = $tmp->getUsername(); 
-        return new Response('<html><body>'. $tmp.'</body></html>');
+        //return new Response('<html><body>'. $tmp.'</body></html>');
+        return $this->render('main.html.twig',array('username' => $tmp) );
 	 }
 
 	 
