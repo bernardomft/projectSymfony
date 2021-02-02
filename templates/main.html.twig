@@ -10,7 +10,11 @@
     <body>
         
         {% block body %}
-            <h1> bienvenido  {{username}}</h1>
+            {#<h1> bienvenido  {{username}}</h1>#}
+
+            {%for m in messages %}
+				<tr><td>{{ m.body }}</td></tr>
+			{% endfor %}
         {% endblock %}
     </body>
 </html>
