@@ -13,7 +13,10 @@ class Groups{
 	*   @ORM\GeneratedValue
     */
     private $id_group;
-    /** @ORM\Column(type="string")*/
+   	/**
+     * @ORM\OneToMany(targetEntity="Message", inversedBy="Groups")
+     * @ORM\JoinColumn(name="message", referencedColumnName="id_msg")
+     **/
 	private $id_msg;
 	/** @ORM\Column(type="integer")*/
     private $id_user;
