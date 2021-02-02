@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 */
 class Message{
 	/** @ORM\Column(type="integer")
-	* 	@ORM\id_msg
+	* 	@ORM\Id
 	*   @ORM\GeneratedValue
     */
     private $id_msg;
