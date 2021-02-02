@@ -17,10 +17,14 @@ class MainControler extends AbstractController{
      * @Route("/main", name="main")	 
      */
 	 public function main(){
-        $entityManager = $this->getDoctrine()->getManager();
-		$eq = $entityManager->find(Users::class, 1);
+        /*$entityManager = $this->getDoctrine()->getManager();
+		$eq = $entityManager->find(Users::class, 4);
 		$username = $eq->getUsername();
         return new Response('<html><body>'. $username.'</body></html>');
+        */
+        $tmp = $this->getUser();
+        $tmp = $tmp->getUsername(); 
+        return new Response('<html><body>'. $tmp.'</body></html>');
 	 }
 
 	 
