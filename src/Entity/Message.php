@@ -15,7 +15,10 @@ class Message{
     private $id_msg;
     /** @ORM\Column(type="string")*/
 	private $body;
-	/** @ORM\Column(type="integer")*/
+	/**
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="message")
+     * @ORM\JoinColumn(name="users", referencedColumnName="code")
+     **/
 	private $origin_user_id;
 
 
@@ -26,14 +29,24 @@ class Message{
 	public function getBody(){
 		return $this->body;
 	}
-	public function getOriginUserId(){
-		return $this->origin_user_id;
-	}
+	 /**
+     * @return mixed
+     */
+    public function getOriginUserId()
+    {
+        return $this->origin_user_id;
+    }
 
 	public function setBody($body){
 		$this->body = $body;
 	}
+
+	/**
+     * @param mixed $origin_user_id
+     */
 	public function setOriginUserId($origin_user_id){
 		$this->origin_user_id = $origin_user_id;
 	}
+
+
 }

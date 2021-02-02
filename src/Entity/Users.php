@@ -1,6 +1,8 @@
 <?php
 // src/Entity/Users.php
 namespace App\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,19 @@ class Users implements UserInterface{
 	private $picture;
 	/** @ORM\Column(type="integer")*/
 	private $role;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Message", mappedBy="users")
+	 */
+	private $messages;
+
+	/**
+	 * Users constructor.
+	 */
+	public function __construct()
+	{
+		$this->messages = new ArrayCollection();
+	}
 
 	public function getCod(){
 		return $this->cod;
@@ -96,5 +111,19 @@ class Users implements UserInterface{
 	}
 	public function eraseCredentials(){
 		return null; 
+	}
+
+	/**
+	 * @return ArrayCollection
+	 */
+	public function getMessages(){
+		return $this->messages;	
+	}
+
+	/**
+	 * @param ArrayCollection $messages
+	 */
+	public function setMessage($messages){
+		$this->messages = $messages;
 	}
 }
