@@ -17,11 +17,6 @@ class MainControler extends AbstractController{
      * @Route("/main", name="main")	 
      */
 	 public function main(){
-        /*$entityManager = $this->getDoctrine()->getManager();
-		    $eq = $entityManager->find(Users::class, 4);
-		    $username = $eq->getUsername();
-        return new Response('<html><body>'. $username.'</body></html>');
-        */
         $tmp = $this->getUser();
         $tmp_2 = $tmp->getMessages();
         $tmp = $tmp->getUsername();
@@ -30,8 +25,8 @@ class MainControler extends AbstractController{
           array_push($arrayTmp, $a->getBody());
         } 
         //return new Response('<html><body>'. $tmp.'</body></html>');
-        //return $this->render('main.html.twig',array('messages' => $tmp_2) );
-        return new Response('<html><body>'.print_r($arrayTmp).'</body></html>');
+        return $this->render('main.html.twig',array('username' => $tmp));
+        //return new Response('<html><body>'.print_r($arrayTmp).'</body></html>');
 	 }
 
 	 

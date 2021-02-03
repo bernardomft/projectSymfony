@@ -3,18 +3,38 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link href="{{ asset('css/reset.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/styles.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('js/script.js') }}" type="text/javascript"></script>
+        {% endblock %}
     </head>
     <body>
         
         {% block body %}
-            {<h1> bienvenido  {{username}}</h1>}
+            <div id="contenedor-principal_id" class="contenedor-principal">
+                <div id='chat_id' class='chat'>
+                    <h3 id='titulo_'>CHATS OF {{username}}</h3>
+                    <button><b>Add friends</b></button>
+                    <button><b>Difusion Message</b></button>
+                    <button><b>Log Out</b></button>
+                </div>
 
-            {%for m in messages %}
-				<tr><td>{{ m.body }}</td></tr>
-			{% endfor %}
+                <div id="contenedor_conver_id" class="contenedor_conver">
+                    <div id="divPerf" class="divPerf"></div>
+                    <div id="conver_id" class="conver"></div>
+                    <form id="form_message" class="">
+                        <input type='text' id="input_msg">
+                        <button>SEND</button>
+                    </form>
+                </div>
+                
+            </div>
+            <div id="" class=""></div>
+            
         {% endblock %}
     </body>
 </html>
