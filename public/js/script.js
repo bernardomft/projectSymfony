@@ -6,6 +6,18 @@ function currentUser(){
 
 function cargarChats(){
     console.log('tu raza gitana ' + currentUser());
+    var ruta = Routing.generate('GetChats');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        data: ({username: currentUser()}),
+        async: true,
+        dataType: 'text',
+        success: function (data){
+            console.log('respuesta recibida' + data);
+        }
+    });
+    
 }
 
 
