@@ -16,8 +16,8 @@ class Message{
     /** @ORM\Column(type="string")*/
 	private $body;
 	/**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="message")
-     * @ORM\JoinColumn(name="users", referencedColumnName="code")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
+     * @ORM\JoinColumn(name="origin_user_id", referencedColumnName="code")
      **/
 	private $origin_user_id;
 

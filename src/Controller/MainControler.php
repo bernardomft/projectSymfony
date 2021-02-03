@@ -24,9 +24,14 @@ class MainControler extends AbstractController{
         */
         $tmp = $this->getUser();
         $tmp_2 = $tmp->getMessages();
-        $tmp = $tmp->getUsername(); 
+        $tmp = $tmp->getUsername();
+        $arrayTmp = [];
+        foreach( $tmp_2 as $a ){
+          array_push($arrayTmp, $a->getBody());
+        } 
         //return new Response('<html><body>'. $tmp.'</body></html>');
-        return $this->render('main.html.twig',array('messages' => $tmp_2) );
+        //return $this->render('main.html.twig',array('messages' => $tmp_2) );
+        return new Response('<html><body>'.print_r($arrayTmp).'</body></html>');
 	 }
 
 	 

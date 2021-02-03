@@ -38,7 +38,7 @@ class Users implements UserInterface{
 	private $role;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Message", mappedBy="users")
+	 * @ORM\OneToMany(targetEntity="Message", mappedBy="origin_user_id")
 	 */
 	private $messages;
 
