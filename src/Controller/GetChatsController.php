@@ -18,11 +18,12 @@ class GetChatsController extends AbstractController
      */
     public function GetChats(Request $request)
     {
+        //return new Response( 'hola');
         
         if ($request->isXmlHttpRequest()) {
-            $username = $request->query->get('username');
+            $username = $request->get('username');
             return new Response($username);
         }
-
+        
     }
 }
