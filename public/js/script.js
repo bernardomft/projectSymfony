@@ -10,11 +10,10 @@ function cargarChats(){
     $.ajax({
         type: 'POST',
         url: ruta,
-        data: ({username: currentUser()}),
         async: true,
         dataType: 'text',
         success: function (data){
-            console.log('respuesta recibida' + data);
+            console.log('respuesta recibida ' + data);
         }
     });
     
