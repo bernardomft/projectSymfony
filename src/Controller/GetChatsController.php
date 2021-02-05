@@ -8,12 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class GetChatsController extends AbstractController
 {
     
     /**
-     * @Route("/GetChats,  options={"expose"=true} , name="GetChats")
-     * @Method({"POST", "GET"}
+     * @Route("/GetChats",  options={"expose"=true} , name="GetChats" ,methods={"POST", "GET"})
+     * 
      */
     public function GetChats(Request $request)
     {
