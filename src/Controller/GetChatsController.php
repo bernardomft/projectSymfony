@@ -22,13 +22,20 @@ class GetChatsController extends AbstractController
         
         if ($request->isXmlHttpRequest()) {
             $tmp = $this->getUser();
+            $sent_to = $tmp->getSentTo();
             $message=$tmp->getMessages();
             $arrayTmp = [];
+            $arrayTmp2 = [];
             foreach ($message as $a) {
-            array_push($arrayTmp, $a->getIdMsg());
+                array_push($arrayTmp, $a->getSentTo());
+            }
+            foreach ($arrayTmp as $a) {
+                foreach($a as $b){
+                    array_push($arrayTmp2, $b->getCodeSent());
+                }
             }
             //$username = $request->get('username');
-            return new Response(json_encode($arrayTmp));
+            return new Response(json_encode($arrayTmp2));
         }
        
     }

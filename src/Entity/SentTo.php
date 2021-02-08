@@ -1,5 +1,5 @@
 <?php
-// src/Entity/Sent_to.php
+// src/Entity/SentTo.php
 namespace App\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -7,22 +7,25 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity 
  * @ORM\Table(name="sent_to")
 */
-class Message{
+class SentTo{
     /** @ORM\Column(name="code", type="integer", nullable=false)
 	* 	@ORM\id
 	*   @ORM\GeneratedValue
     */
     private $code_sent;
+
 	/**
-     * @ORM\ManyToMany(targetEntity="Message", inversedBy="sent_to")
-     * @ORM\JoinColumn(name="message", referencedColumnName="id_msg")
+     * @ORM\ManyToOne(targetEntity="Message", inversedBy="sent_to")
+     * @ORM\JoinColumn(name="id_msg", referencedColumnName="id_msg")
      **/
     private $id_msg;
+
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="sent_to")
-     * @ORM\JoinColumn(name="user", referencedColumnName="code")
+     * @ORM\ManyToMany(targetEntity="Users", mappedBy="sent_to")
+     * @ORM\JoinColumn(name="code", referencedColumnName="id_dest_user")
      **/
     private $id_dest_user;
+
     /** @ORM\Column(type="string")*/
 	private $read;
 

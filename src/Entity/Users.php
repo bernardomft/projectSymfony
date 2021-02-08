@@ -43,11 +43,16 @@ class Users implements UserInterface{
 	private $messages;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="SentTo", mappedBy="id_dest_user")
+	 */
+	private $sent_to;
+	/**
 	 * Users constructor.
 	 */
 	public function __construct()
 	{
 		$this->messages = new ArrayCollection();
+		$this->sent_to = new ArrayCollection();
 	}
 
 	public function getCod(){
@@ -126,4 +131,19 @@ class Users implements UserInterface{
 	public function setMessage($messages){
 		$this->messages = $messages;
 	}
+
+	/**
+     * @param mixed $sent_to
+     */
+	public function setSentTo($sent_to){
+		$this->sent_to = $sent_to;
+	}
+
+	 /**
+     * @return ArrayCollection
+     */
+    public function getSentTo()
+    {
+        return $this->sent_to;
+    }
 }
