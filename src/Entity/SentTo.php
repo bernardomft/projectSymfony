@@ -22,7 +22,7 @@ class SentTo{
 
     /**
      * @ORM\ManyToMany(targetEntity="Users", mappedBy="sent_to")
-     * @ORM\JoinColumn(name="code", referencedColumnName="id_dest_user")
+     * @ORM\JoinColumn(name="id_dest_user", referencedColumnName="code")
      **/
     private $id_dest_user;
 
