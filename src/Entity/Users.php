@@ -1,149 +1,242 @@
 <?php
-// src/Entity/Users.php
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-/**
- * @ORM\Entity 
- * @ORM\Table(name="users")
-*/
-class Users implements UserInterface{
 
-	/**
+/**
+ * Users
+ *
+ * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="USER_NAME", columns={"username"})})
+ * @ORM\Entity
+ */
+class Users implements UserInterface
+{
+    /**
      * @var int
      *
      * @ORM\Column(name="code", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-	private $cod;
-	/** @ORM\Column(type="string")*/
-	private $name;
-	/** @ORM\Column(type="string")*/	
-	private $surname;
-	/** @ORM\Column(type="string")*/
-	private $email;
-	/** @ORM\Column(type="string")*/	
-	private $password;
-	/** @ORM\Column(type="string")*/	
-	private $address;
-	/** @ORM\Column(type="string")*/	
-	private $username;
-	/** @ORM\Column(type="string")*/	
-	private $picture;
-	/** @ORM\Column(type="integer")*/
-	private $role;
+    private $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=20, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="surname", type="string", length=30, nullable=false)
+     */
+    private $surname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=30, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=60, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=80, nullable=false)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=15, nullable=false)
+     */
+    private $username;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="picture", type="string", length=2000, nullable=true)
+     */
+    private $picture;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="role", type="integer", nullable=false)
+     */
+    private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Message" , mappedBy="originUser");
+     */
+    private $message;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SentTo" , mappedBy="idDestUser");
+     */
+    private $sentTo;
+
+    public function __construct()
+    {
+        $this->message = new ArrayCollection();
+        $this->sentTo = new ArrayCollection();
+    }
+
+     /**
+	 * @return ArrayCollection
+	 */
+	public function getSentTo(){
+		return $this->sentTo;	
+	}
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Message", mappedBy="origin_user_id")
+	 * @param ArrayCollection $sentTo
 	 */
-	private $messages;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="SentTo", mappedBy="id_dest_user")
-	 */
-	private $sent_to;
-	/**
-	 * Users constructor.
-	 */
-	public function __construct()
-	{
-		$this->messages = new ArrayCollection();
-		$this->sent_to = new ArrayCollection();
+	public function setSentTo($sentTo){
+		$this->sentTo = $sentTo;
 	}
 
-	public function getCod(){
-		return $this->cod;
+    /**
+	 * @return ArrayCollection
+	 */
+	public function getMessages(){
+		return $this->message;	
 	}
-	public function getName(){
-		return $this->name;
+
+	/**
+	 * @param ArrayCollection $message
+	 */
+	public function setMessage($message){
+		$this->message = $message;
 	}
-	public function getSurname(){
-		return $this->surname;
+
+    public function getCode(): ?int
+    {
+        return $this->code;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): self
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getRole(): ?int
+    {
+        return $this->role;
+    }
+
+    public function setRole(int $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getSalt(){
+		return null;
 	}
-	public function getEmail(){
-		return $this->email;
+    
+    public function eraseCredentials(){
+		return null; 
 	}
-	public function getPassword(){
-		return $this->password;
-	}
-	public function getAddress(){
-		return $this->address;
-	}
-	public function getUsername(){
-		return $this->username;
-	}
-	public function getPicture(){
-		return $this->picture;
-	}
-	public function getRoles()  {
+
+    public function getRoles()  {
         if ($this->role==0) {
             return ['ROLE_USER'];
         } else {
             return ['ROLE_USER', 'ROLE_ADMIN'];
         }
-    }
-
-	public function setName($name){
-		$this->name = $name;
-	}
-	public function setSurname($surname){
-		$this->surname = $surname;
-	}
-	public function setEmail($email){
-		$this->email = $email;
-	}
-	public function setPassword($password){
-		$this->password = $password;
-	}
-	public function setAddress($address){
-		$this->address = $address;
-	}
-	public function setUsername($username){
-		$this->username = $username;
-	}
-	public function setPicture($picture){
-		$this->picture = $picture;
-	}
-	public function setRole($role){
-		$this->role = $role;
-	}
-	public function getSalt(){
-		return null;
-	}
-	public function eraseCredentials(){
-		return null; 
-	}
-
-	/**
-	 * @return ArrayCollection
-	 */
-	public function getMessages(){
-		return $this->messages;	
-	}
-
-	/**
-	 * @param ArrayCollection $messages
-	 */
-	public function setMessage($messages){
-		$this->messages = $messages;
-	}
-
-	/**
-     * @param mixed $sent_to
-     */
-	public function setSentTo($sent_to){
-		$this->sent_to = $sent_to;
-	}
-
-	 /**
-     * @return ArrayCollection
-     */
-    public function getSentTo()
-    {
-        return $this->sent_to;
     }
 }

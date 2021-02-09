@@ -1,74 +1,93 @@
 <?php
-// src/Entity/SentTo.php
-namespace App\Entity;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping as ORM;
-/**
- * @ORM\Entity 
- * @ORM\Table(name="sent_to")
-*/
-class SentTo{
-    /** @ORM\Column(name="code", type="integer", nullable=false)
-	* 	@ORM\id
-	*   @ORM\GeneratedValue
-    */
-    private $code_sent;
 
-	/**
-     * @ORM\ManyToOne(targetEntity="Message", inversedBy="sent_to")
-     * @ORM\JoinColumn(name="id_msg", referencedColumnName="id_msg")
-     **/
-    private $id_msg;
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * SentTo
+ *
+ * @ORM\Table(name="sent_to", indexes={@ORM\Index(name="message_id", columns={"id_msg"}), @ORM\Index(name="message_des", columns={"id_dest_user"})})
+ * @ORM\Entity
+ */
+class SentTo
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="code_sent", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $codeSent;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Users", mappedBy="sent_to")
-     * @ORM\JoinColumn(name="id_dest_user", referencedColumnName="code")
-     **/
-    private $id_dest_user;
+     * @var bool
+     *
+     * @ORM\Column(name="read", type="boolean", nullable=false)
+     */
+    private $read;
 
-    /** @ORM\Column(type="string")*/
-	private $read;
+    /**
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="Users" , inversedBy="sentTo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_dest_user", referencedColumnName="code")
+     * })
+     */
+    private $idDestUser;
 
-    
+    /**
+     * @var \Message
+     *
+     * @ORM\ManyToOne(targetEntity="Message", inversedBy="sentTo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_msg", referencedColumnName="id_msg")
+     * })
+     */
+    private $idMsg;
 
-    //getters
-
-	public function getIdMsg(){
-		return $this->id_msg;
-	}
-	public function getCodeSent(){
-		return $this->code_sent;
+    public function getCodeSent(): ?int
+    {
+        return $this->codeSent;
     }
-    public function getRead()
+
+    public function getRead(): ?bool
     {
         return $this->read;
     }
-	 /**
-     * @return mixed
-     */
-    public function getIdDestUser()
+
+    public function setRead(bool $read): self
     {
-        return $this->id_dest_user;
+        $this->read = $read;
+
+        return $this;
     }
 
-    //Setters
-
-	public function setIdMsg($id_msg){
-		$this->id_msg = $id_msg;
+    public function getIdDestUser(): ?Users
+    {
+        return $this->idDestUser;
     }
-    public function setCodeSent($code_sent){
-		$this->code_sent = $code_sent;
-    }
-    public function setRead($read){
-		$this->read = $read;
-	}
 
-	/**
-     * @param mixed $id_dest_user
-     */
-	public function setIdDestUser($id_dest_user){
-		$this->id_dest_user = $id_dest_user;
-	}
+    public function setIdDestUser(?Users $idDestUser): self
+    {
+        $this->idDestUser = $idDestUser;
+
+        return $this;
+    }
+
+    public function getIdMsg(): ?Message
+    {
+        return $this->idMsg;
+    }
+
+    public function setIdMsg(?Message $idMsg): self
+    {
+        $this->idMsg = $idMsg;
+
+        return $this;
+    }
 
 
 }

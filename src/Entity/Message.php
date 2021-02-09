@@ -1,81 +1,115 @@
 <?php
-// src/Entity/Message.php
+
 namespace App\Entity;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @ORM\Entity 
- * @ORM\Table(name="message")
-*/
-class Message{
-	/** @ORM\Column(type="integer")
-	* 	@ORM\id
-	*   @ORM\GeneratedValue
-    */
-    private $id_msg;
-    /** @ORM\Column(type="string")*/
-	private $body;
-	/**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
-     * @ORM\JoinColumn(name="origin_user_id", referencedColumnName="code")
-     **/
-	private $origin_user_id;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="SentTo", mappedBy="id_msg")
-	 */
-	private $sent_to;
-
-
-	/**
-	 * Message constructor.
-	 */
-	public function __construct()
-	{
-		$this->origin_user_id = new ArrayCollection();
-		$this->sent_to = new ArrayCollection();
-	}
-
-	public function getIdMsg(){
-		return $this->id_msg;
-	}
-	public function getBody(){
-		return $this->body;
-	}
-	 /**
-     * @return mixed
+ * Message
+ *
+ * @ORM\Table(name="message", indexes={@ORM\Index(name="code_user", columns={"origin_user_id"})})
+ * @ORM\Entity
+ */
+class Message
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_msg", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getOriginUserId()
+    private $idMsg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="body", type="string", length=1000, nullable=false)
+     */
+    private $body;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="time", type="datetime", nullable=false)
+     */
+    private $time;
+
+    /**
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="Users" , inversedBy="message");
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="origin_user_id", referencedColumnName="code")
+     * })
+     */
+    private $originUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SentTo" , mappedBy="idMsg")
+     */
+    private $sentTo;
+
+    public function __construct()
     {
-        return $this->origin_user_id;
+        $this->sentTo = new ArrayCollection();
     }
 
-	 /**
-     * @return ArrayCollection
-     */
-    public function getSentTo()
+    /**
+	 * @return ArrayCollection
+	 */
+	public function getSentTo(){
+		return $this->sentTo;	
+	}
+
+	/**
+	 * @param ArrayCollection $sentTo
+	 */
+	public function setSentTo($sentTo){
+		$this->sentTo = $sentTo;
+	}
+
+    public function getIdMsg(): ?int
     {
-        return $this->sent_to;
+        return $this->idMsg;
     }
 
-	public function setBody($body){
-		$this->body = $body;
-	}
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
 
-	/**
-     * @param mixed $origin_user_id
-     */
-	public function setOriginUserId($origin_user_id){
-		$this->origin_user_id = $origin_user_id;
-	}
+    public function setBody(string $body): self
+    {
+        $this->body = $body;
 
-	/**
-     * @param mixed $sent_to
-     */
-	public function setSentTo($sent_to){
-		$this->sent_to = $sent_to;
-	}
+        return $this;
+    }
+
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->time;
+    }
+
+    public function setTime(\DateTimeInterface $time): self
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    public function getOriginUser(): ?Users
+    {
+        return $this->originUser;
+    }
+
+    public function setOriginUser(?Users $originUser): self
+    {
+        $this->originUser = $originUser;
+
+        return $this;
+    }
 
 
 }
