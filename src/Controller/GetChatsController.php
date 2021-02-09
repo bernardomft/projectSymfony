@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\SentTo;
+use App\Entity\Users;
+use App\Entity\Message;
 
 class GetChatsController extends AbstractController
 {
@@ -61,8 +63,33 @@ class GetChatsController extends AbstractController
      */
     public function CheckReadChats(Request $request){
         if ($request->isXmlHttpRequest()){
-            $param=json_decode($request->get('chat'));
-            return new Response(json_encode($param));
+            $user = $this->getUser()->getCode();
+            $dest=json_decode($request->getContent());
+            $repository = $this->getDoctrine()->getRepository(Users::class);
+            $destino = $repository->findBy(array('username' => $dest));
+            $arrayTmp = [];
+            $arrayTmp2 = [];
+            foreach($destino as $a){
+               array_push($arrayTmp, $a->getMessages());
+            }
+            foreach($arrayTmp as $a){
+                foreach($a as $b){
+                    array_push($arrayTmp2, $b->getSentTo());
+                }
+             }
+             $arrayTmp = [];  
+             foreach($arrayTmp2 as $a){
+                foreach($a as $b){
+                    if($b->getIdDestUser()->getCode() == $user)
+                        array_push($arrayTmp, $b->getRead());
+                }
+             }
+             foreach($arrayTmp2 as $a){
+                 if($a === 'false')
+                    return new Response(json_encode('false'));
+             }
+            
+            return new Response(json_encode('true'));
         }
     }
 }
