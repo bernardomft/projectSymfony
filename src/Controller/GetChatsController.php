@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\SentTo;
 use App\Entity\Users;
 use App\Entity\Message;
+use Symfony\Component\Validator\Constraints\IsFalse;
 
 class GetChatsController extends AbstractController
 {
@@ -84,8 +85,8 @@ class GetChatsController extends AbstractController
                         array_push($arrayTmp, $b->getRead());
                 }
              }
-             foreach($arrayTmp2 as $a){
-                 if($a === 'false')
+             foreach($arrayTmp as $a){
+                 if(!$a)
                     return new Response(json_encode('false'));
              }
             

@@ -24,6 +24,7 @@ function cargarChats(){
     });
 }
 
+//comprueba que el usuario no tengo mensajes sin leer
 function checkRead(chat){
     var ruta = Routing.generate('CheckReadChats');
     $.ajax({
@@ -33,7 +34,9 @@ function checkRead(chat){
         dataType: 'text',
         data: JSON.stringify(chat),
         success: function (data){
-            console.log('respuesta recibida ' + data);
+            if (JSON.parse(data) === "false") {
+                document.getElementById('chat_' + chat).style.color = 'red';
+            }
         }
     });
 }
