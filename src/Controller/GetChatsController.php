@@ -20,7 +20,6 @@ class GetChatsController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $tmp = $this->getUser();
-            //$sent_to = $tmp->getSentTo();
             $message=$tmp->getMessages();
             $arrayTmp = [];
             $arrayTmp2 = [];
@@ -38,25 +37,32 @@ class GetChatsController extends AbstractController
                 if(!(in_array($a->getUsername(),$arrayTmp)))
                     array_push($arrayTmp, $a->getUsername());
             }
-
-            $arrayTmp = [];
-            $entityManager = $this->getDoctrine()->getManager();
-            $eq = $entityManager->find(SentTo::class, 1);
+            $arrayTmp2 = [];
             $repository = $this->getDoctrine()->getRepository(SentTo::class);
             $destino = $repository->findBy(array('idDestUser' =>$tmp->getCode() ));
-            //$username = $request->get('username');
             foreach($destino as $a){
                 array_push($arrayTmp3, $a->getIdMsg());
             }
             foreach($arrayTmp3 as $a){
-                array_push($arrayTmp, $a->getOriginUser());
+                array_push($arrayTmp2, $a->getOriginUser());
             }
             $arrayTmp3 = [];
-            foreach($arrayTmp as $a){
-                array_push($arrayTmp3, $a->getUsername());
+            foreach($arrayTmp2 as $a){
+                if(!(in_array($a->getUsername(),$arrayTmp)))
+                    array_push($arrayTmp, $a->getUsername());
             }
-            return new Response(json_encode($arrayTmp3));
+            return new Response(json_encode($arrayTmp));
         }
-       
+    }
+
+     /**
+     * @Route("/CheckReadChats",  options={"expose"=true} , name="CheckReadChats" ,methods={"POST", "GET"})
+     * 
+     */
+    public function CheckReadChats(Request $request){
+        if ($request->isXmlHttpRequest()){
+            $param=json_decode($request->get('chat'));
+            return new Response(json_encode($param));
+        }
     }
 }
