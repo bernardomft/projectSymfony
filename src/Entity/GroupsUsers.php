@@ -24,7 +24,7 @@ class GroupsUsers
     /**
      * @var \Groups
      *
-     * @ORM\ManyToOne(targetEntity="Groups")
+     * @ORM\ManyToOne(targetEntity="Groups", inversedBy="groupsUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_group", referencedColumnName="id_group")
      * })
@@ -34,7 +34,7 @@ class GroupsUsers
     /**
      * @var \Users
      *
-     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="groupsUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="code")
      * })

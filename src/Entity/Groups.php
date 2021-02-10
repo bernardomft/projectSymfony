@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Groups
@@ -44,6 +45,31 @@ class Groups
      * })
      */
     private $idMsg;
+
+    /**
+     * @ORM\OneToMany(targetEntity="GroupsUsers" , mappedBy="idGroup");
+     */    
+    private $groupUser;
+
+    public function __construct()
+    {
+        $this->groupUser = new ArrayCollection();
+    }
+
+    /**
+	 * @return ArrayCollection
+	 */
+	public function getGroupUser(){
+		return $this->groupsUser;	
+	}
+
+	/**
+	 * @param ArrayCollection $groupUser
+	 */
+	public function setGroupUser($groupUser){
+		$this->groupUser = $groupUser;
+	}
+
 
     public function getIdGroup(): ?int
     {

@@ -93,4 +93,60 @@ class GetChatsController extends AbstractController
             return new Response(json_encode('true'));
         }
     }
+
+    /**
+     * @Route("/GetConversation",  options={"expose"=true} , name="GetConversation" ,methods={"POST", "GET"})
+     * 
+     */
+    public function GetConversation(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            
+            $param=json_decode($request->getContent());
+            $entityManager = $this->getDoctrine()->getManager();
+            $destCode = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
+            $user = $this->getUser()->getMessages();
+            $arrayTmp = [];
+            $arrayTmp2 = [];
+            foreach($user as $a){
+                $tmp = $a->getSentTo();
+                foreach($tmp as $b){
+                    foreach($b as $c){
+                        if($c->getIdDestUser()->getCode() === $destCode[0]->getCode()){
+
+                        }
+                    }
+                }
+                //if($a->getSentTo()->getIdDestUser()->getCode() ==$destCode[0]->getCode())
+                    array_push($arrayTmp, $a->getSentTo());
+            }
+            foreach($arrayTmp as $a){
+                foreach($a as $b){
+                    array_push($arrayTmp2, $b->getIdDestUser()->getCode());
+                }
+            }
+
+            return new Response(json_encode($arrayTmp2));
+        }
+    }
+
+    /**
+     * @Route("/GetGroups",  options={"expose"=true} , name="GetGroups" ,methods={"POST", "GET"})
+     * 
+     */
+    public function GetGroups(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $user = $this->getUser();
+            $groups = $user->getGroupUser();
+            $arrayTmp = [];
+            foreach($groups as $a){
+                if(!(in_array($a->getIdGroup()->getName(),$arrayTmp)))
+                    array_push($arrayTmp, $a->getIdGroup()->getName());
+            }
+
+            return new Response(json_encode($arrayTmp));
+        }
+    }
+
 }

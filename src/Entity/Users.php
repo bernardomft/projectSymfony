@@ -89,11 +89,31 @@ class Users implements UserInterface
      */
     private $sentTo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="GroupsUsers" , mappedBy="idUser");
+     */
+    private $groupsUser;
+
     public function __construct()
     {
         $this->message = new ArrayCollection();
         $this->sentTo = new ArrayCollection();
+        $this->groupsUser = new ArrayCollection();
     }
+
+     /**
+	 * @return ArrayCollection
+	 */
+	public function getGroupUser(){
+		return $this->groupsUser;	
+	}
+
+	/**
+	 * @param ArrayCollection $groupsUser
+	 */
+	public function setGroupUser($groupsUser){
+		$this->groupsUser = $groupsUser;
+	}
 
      /**
 	 * @return ArrayCollection

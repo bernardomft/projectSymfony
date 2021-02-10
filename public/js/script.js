@@ -18,8 +18,9 @@ function cargarChats(){
         success: function (data){
             deleteChats();
             createChats(JSON.parse(data));
-            console.log(JSON.parse(data));
-            console.log('respuesta recibida ' + data);
+            //console.log(JSON.parse(data));
+            //console.log('respuesta recibida ' + data);
+            cargarGroups();
         }
     });
 }
@@ -41,6 +42,44 @@ function checkRead(chat){
     });
 }
 
+//Busca en la BBDD los grupos de el usuario
+//Primera funcion que es llamada
+function cargarGroups(){
+    var ruta = Routing.generate('GetGroups');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        success: function (data){
+            createGroups(JSON.parse(data));
+        }
+    });
+}
+
+function onClick() {
+    //clearInterval(intervalConversation);
+    while (document.getElementById('conver_id').firstChild)
+        document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
+    var user = this.id.substring(5, this.id.length);
+    //userGlobal = user;
+    //updateRead(currentUser);
+    document.getElementById('divPerf').innerHTML = '' + user;
+    document.getElementById(this.id).style.color = '#FFFFFF';
+    console.log(user);
+    var ruta = Routing.generate('GetConversation');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(user),
+        success: function (data){
+            console.log(JSON.parse(data));
+        }
+    });
+}
+
 /* FIN PETICIONES AJAX */
 //Esta funcion carga los chats de un suario en la página
 function createChats(chats) {
@@ -50,13 +89,29 @@ function createChats(chats) {
         var ele = document.createElement('div');
         ele.id = 'chat_' + chats[i];
         ele.style.textAlign = 'center';
-        //ele.addEventListener("click", onClick)
+        ele.addEventListener("click", onClick)
         var p = document.createElement('p');
         p.innerHTML = chats[i];
         p.style.margin = '10px';
         ele.appendChild(p);
         document.getElementById('chat_id').appendChild(ele);
         checkRead(chats[i]);
+    }
+}
+
+function createGroups(grupos) {
+    gruposGlobal = [];
+    gruposGlobal = grupos;
+    for (var i = 0; i < grupos.length; i++) {
+        var ele = document.createElement('div');
+        ele.id = 'group_' + grupos[i];
+        ele.style.textAlign = 'center';
+        //ele.addEventListener("click", onClick2)
+        var p = document.createElement('p');
+        p.innerHTML = grupos[i];
+        p.style.margin = '10px';
+        ele.appendChild(p);
+        document.getElementById('chat_id').appendChild(ele);
     }
 }
 
