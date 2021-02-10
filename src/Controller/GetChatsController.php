@@ -101,32 +101,45 @@ class GetChatsController extends AbstractController
     public function GetConversation(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            
+            $arrayMsg = [];
+            $arrayTmp = [];
             $param=json_decode($request->getContent());
             $entityManager = $this->getDoctrine()->getManager();
-            $destCode = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
-            $user = $this->getUser()->getMessages();
-            $arrayTmp = [];
-            $arrayTmp2 = [];
-            foreach($user as $a){
-                $tmp = $a->getSentTo();
-                foreach($tmp as $b){
-                    foreach($b as $c){
-                        if($c->getIdDestUser()->getCode() === $destCode[0]->getCode()){
-
-                        }
+            $destUser = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
+            $user = $this->getUser();
+            //mensajes de user a destUser
+            $messages_user = $user->getMessages();
+            foreach($messages_user as $m){
+                $tmp = $m->getSentTo();
+                foreach($tmp as $t){
+                    $tmp2 = $t->getIdDestUser()->getCode();
+                    if($tmp2 === $destUser[0]->getCode()){
+                        array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
+                        array_push($arrayTmp, $t->getIdMsg()->getBody());
+                        array_push($arrayTmp, $t->getIdMsg()->getTime());
+                        array_push($arrayMsg, $arrayTmp);
+                        $arrayTmp = [];
                     }
                 }
-                //if($a->getSentTo()->getIdDestUser()->getCode() ==$destCode[0]->getCode())
-                    array_push($arrayTmp, $a->getSentTo());
             }
-            foreach($arrayTmp as $a){
-                foreach($a as $b){
-                    array_push($arrayTmp2, $b->getIdDestUser()->getCode());
+            //mensajes de destUser a user
+            $messages_dest_user = $destUser[0]->getMessages();
+            foreach($messages_dest_user as $m){
+                $tmp = $m->getSentTo();
+                foreach($tmp as $t){
+                    $tmp2 = $t->getIdDestUser()->getCode();
+                    if($tmp2 === $user->getCode()){
+                        array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
+                        array_push($arrayTmp, $t->getIdMsg()->getBody());
+                        array_push($arrayTmp, $t->getIdMsg()->getTime());
+                        array_push($arrayMsg, $arrayTmp);
+                        $arrayTmp = [];
+                    }
                 }
             }
+           
 
-            return new Response(json_encode($arrayTmp2));
+            return new Response(json_encode($arrayMsg));
         }
     }
 
