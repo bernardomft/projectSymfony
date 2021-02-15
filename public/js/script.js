@@ -43,7 +43,6 @@ function checkRead(chat){
 }
 
 //Busca en la BBDD los grupos de el usuario
-//Primera funcion que es llamada
 function cargarGroups(){
     var ruta = Routing.generate('GetGroups');
     $.ajax({
@@ -61,19 +60,32 @@ function onClick() {
     //clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
-    var user = this.id.substring(5, this.id.length);
+    var destUser = this.id.substring(5, this.id.length);
     //userGlobal = user;
-    //updateRead(currentUser);
-    document.getElementById('divPerf').innerHTML = '' + user;
+    updateRead(destUser);
+    document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
-    console.log(user);
     var ruta = Routing.generate('GetConversation');
     $.ajax({
         type: 'POST',
         url: ruta,
         async: true,
         dataType: 'text',
-        data: JSON.stringify(user),
+        data: JSON.stringify(destUser),
+        success: function (data){
+            cargarConversacion(JSON.parse(data));
+        }
+    });
+}
+
+function updateRead(destUser){
+    var ruta = Routing.generate('UpdateRead');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(destUser),
         success: function (data){
             console.log(JSON.parse(data));
         }
@@ -120,6 +132,29 @@ function deleteChats() {
     var ele = document.getElementById('chat_id');
     while (ele.children.length > 4)
         ele.removeChild(ele.lastChild);
+}
+
+//cargra la ocnversacion al hacer click
+function cargarConversacion(arrayMsg) {
+    for (var i = 0; i < arrayMsg.length; i++) {
+        var tmp = arrayMsg[i][2].date;
+        arrayMsg[i][2] = new Date(tmp);
+    }
+    arrayMsg.sort(function (a, b) {
+        return a[2] - b[2];
+    });
+    while (document.getElementById('conver_id').firstChild)
+        document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
+    for (var i = 0; i < arrayMsg.length; i++) {
+        var p = document.createElement('p');
+        p.innerHTML = arrayMsg[i][0] + ' dijo:<br> ' + arrayMsg[i][1] +
+            '<br>time: ' + arrayMsg[i][2] + '<br><br>';
+        document.getElementById('conver_id').appendChild(p);
+        document.getElementById('conver_id').style.overflow = 'scroll';
+        document.getElementById('conver_id').style.overflowX = 'hidden';
+        var objDiv = document.getElementById("conver_id");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
 }
 
 
