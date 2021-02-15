@@ -43,7 +43,6 @@ function checkRead(chat){
 }
 
 //Busca en la BBDD los grupos de el usuario
-//Primera funcion que es llamada
 function cargarGroups(){
     var ruta = Routing.generate('GetGroups');
     $.ajax({
@@ -61,10 +60,10 @@ function onClick() {
     //clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
-    var user = this.id.substring(5, this.id.length);
+    var destUser = this.id.substring(5, this.id.length);
     //userGlobal = user;
-    //updateRead(currentUser);
-    document.getElementById('divPerf').innerHTML = '' + user;
+    updateRead(destUser);
+    document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
     var ruta = Routing.generate('GetConversation');
     $.ajax({
@@ -72,10 +71,23 @@ function onClick() {
         url: ruta,
         async: true,
         dataType: 'text',
-        data: JSON.stringify(user),
+        data: JSON.stringify(destUser),
+        success: function (data){
+            cargarConversacion(JSON.parse(data));
+        }
+    });
+}
+
+function updateRead(destUser){
+    var ruta = Routing.generate('UpdateRead');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(destUser),
         success: function (data){
             console.log(JSON.parse(data));
-            cargarConversacion(JSON.parse(data));
         }
     });
 }
@@ -125,7 +137,7 @@ function deleteChats() {
 //cargra la ocnversacion al hacer click
 function cargarConversacion(arrayMsg) {
     for (var i = 0; i < arrayMsg.length; i++) {
-        var tmp = arrayMsg[i][2];
+        var tmp = arrayMsg[i][2].date;
         arrayMsg[i][2] = new Date(tmp);
     }
     arrayMsg.sort(function (a, b) {

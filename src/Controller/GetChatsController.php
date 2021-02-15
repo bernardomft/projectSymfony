@@ -11,8 +11,9 @@ use App\Entity\SentTo;
 use App\Entity\Users;
 use App\Entity\Message;
 use Symfony\Component\Validator\Constraints\IsFalse;
+use Doctrine\ORM\Mapping as ORM;
 
-class GetChatsController extends AbstractController
+class GetChatsController extends AbstractController 
 {
     
     /**
@@ -54,6 +55,16 @@ class GetChatsController extends AbstractController
                 if(!(in_array($a->getUsername(),$arrayTmp)))
                     array_push($arrayTmp, $a->getUsername());
             }
+            /*$code_user = $this->getUser()->getCode();
+            $entityManager = $this->getDoctrine()->getManager();
+            $query = $entityManager->createQuery("SELECT `users`.`username`, `sent_to`.`id_dest_user` from projectSymfony/Model/User 
+                                    INNER JOIN `message` on `users`.`code` = `message`.`origin_user_id`
+                                    INNER JOIN `sent_to` on `sent_to`.`id_msg` = `message`.`id_msg`
+                                    where `sent_to`.`id_dest_user` like :code
+                                    group by `username`");
+            $query->setParameter('code', $code_user);
+            $query->execute();
+            $dest_users = $query->getResult();*/
             return new Response(json_encode($arrayTmp));
         }
     }
@@ -159,6 +170,37 @@ class GetChatsController extends AbstractController
             }
 
             return new Response(json_encode($arrayTmp));
+        }
+    }
+
+    /**
+     * @Route("/UpdateRead",  options={"expose"=true} , name="UpdateRead" ,methods={"POST", "GET"})
+     * 
+     */
+    public function UpdateRead(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $user = $this->getUser();
+            $tmp2=[];
+            $param=json_decode($request->getContent());
+            $entityManager = $this->getDoctrine()->getManager();
+            $destUser = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
+            $messages_dest_user = $destUser[0]->getMessages();
+            foreach($messages_dest_user as $m){
+                $tmp = $m->getSentTo();
+                foreach($tmp as $t){
+                    if($t->getIdDestUser()->getCode() === $user->getCode() &&
+                        $t->getRead() == false ){
+                            $t->setRead(1);
+                            $entityManager->flush();
+                            $entityManager->persist($t);
+                        array_push($tmp2, $t->getRead());
+                    }
+                } 
+            }
+            
+
+            return new Response(json_encode($tmp2));
         }
     }
 
