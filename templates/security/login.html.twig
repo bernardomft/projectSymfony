@@ -1,22 +1,93 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}SING IN!{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="{{ asset('css/reset.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/styles.css') }}" type="text/css" rel="stylesheet" />
+            
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="{{ asset('js/jQuery.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+            <script>
+
+            function signUp()
+            {
+                var username = document.getElementById("username1").value;
+                var name = document.getElementById("name").value;
+                var surname = document.getElementById("surname").value;
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password1").value;
+
+                
+                var ruta = Routing.generate('signUp');
+                $.ajax({
+                    type: 'POST',
+                    url: ruta,
+                    async: true,
+                    dataType: 'text',
+                    data: JSON.stringify([username,name,surname,email,password]),
+                    success: function (data){
+                         alert('Usuario creado correectamente');
+                    }
+                });
+            }
+            </script>
+        {% endblock %}
+    </head>
+    <body>
+        
+        {% block body %}
+            
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form id='signUp'action="#" method="post">   
+            <label for="username1">Username:</label>
+            <input type="text" id="username1" name="_username1" value="{{ last_username }}"/>
+
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="_password1"/>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="_name" />
+
+             <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="_surname" />
+
+            <label for="email">email:</label>
+            <input type="email" id="email" name="email"/>
+
+            <input type='button' name='sign up' onClick='signUp()'></input>
+        </form>
+
+
+        <form action="{{ path('login') }}" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password"/>
+
+            {#
+                If you want to control the URL the user
+                is redirected to on success (more details below)
+                <input type="hidden" name="_target_path" value="/account"/>
+            #}
+
+            <button type="submit">login</button>
+            {#<button type='reset' onClick="mostrarSignUp()">Sign up</button>#}
+        </form>
+            
+        {% endblock %}
+        
+    </body>
+</html>
 {# templates/security/login.html.twig #}
 {# ... you will probably extend your base template, like base.html.twig #}
-
-{% if error %}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
-
-<form action="{{ path('login') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}"/>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password"/>
-
-    {#
-        If you want to control the URL the user
-        is redirected to on success (more details below)
-        <input type="hidden" name="_target_path" value="/account"/>
-    #}
-
-    <button type="submit">login</button>
-</form>

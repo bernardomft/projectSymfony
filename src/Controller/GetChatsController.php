@@ -109,20 +109,8 @@ class GetChatsController extends AbstractController
             $arrayTmp = [];
             $arrayTmp2 = [];
             foreach($user as $a){
-                $tmp = $a->getSentTo();
-                foreach($tmp as $b){
-                    foreach($b as $c){
-                        if($c->getIdDestUser()->getCode() === $destCode[0]->getCode()){
-
-                        }
-                    }
-                }
-                //if($a->getSentTo()->getIdDestUser()->getCode() ==$destCode[0]->getCode())
-                    array_push($arrayTmp, $a->getSentTo());
-            }
-            foreach($arrayTmp as $a){
                 foreach($a as $b){
-                    array_push($arrayTmp2, $b->getIdDestUser()->getCode());
+                    array_push($arrayTmp2, $b->getSentTo());
                 }
             }
 
@@ -150,3 +138,5 @@ class GetChatsController extends AbstractController
     }
 
 }
+
+
