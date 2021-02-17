@@ -58,6 +58,7 @@ function cargarGroups(){
     });
 }
 
+//Abre la conversacion con el usuario y actualiza el estado de leido o no leido
 function onClick() {
     //clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
@@ -80,6 +81,7 @@ function onClick() {
     });
 }
 
+//envia un mensaje
 function enviarMensaje(){
     var destUser = document.getElementById('divPerf').innerHTML;
     //console.log(destUser);
@@ -98,6 +100,7 @@ function enviarMensaje(){
     });
 }
 
+//atualiza el estado de los mensajes. leidos o no,
 function updateRead(destUser){
     var ruta = Routing.generate('UpdateRead');
     $.ajax({
@@ -131,6 +134,7 @@ function createChats(chats) {
     }
 }
 
+//Esta funcion carga los grupos de un suario en la página
 function createGroups(grupos) {
     gruposGlobal = [];
     gruposGlobal = grupos;
@@ -154,7 +158,7 @@ function deleteChats() {
         ele.removeChild(ele.lastChild);
 }
 
-//cargra la ocnversacion al hacer click
+//cargra la ocnversacion después de recibirla haciendo click
 function cargarConversacion(arrayMsg) {
     for (var i = 0; i < arrayMsg.length; i++) {
         var tmp = arrayMsg[i][2].date;
