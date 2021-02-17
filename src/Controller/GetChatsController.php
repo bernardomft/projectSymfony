@@ -195,25 +195,11 @@ class GetChatsController extends AbstractController
                         $t->getRead() == 0
                     ) {
                         $t->setRead(true);
-                            //$entityManager->persist($t);
-                            $entityManager->flush();
-                        /*$entityManager->getConnection()->beginTransaction(); // suspend auto-commit
-                        try {
-                            //... do some work
-                            $t->setRead(1);
-                            //$entityManager->persist($t);
-                            //$entityManager->flush();
-                            $entityManager->getConnection()->commit();
-                        } catch (Exception $e) {
-                            $entityManager->getConnection()->rollBack();
-                            throw $e;
-                        }*/
+                        $entityManager->flush();
                         array_push($tmp2, $t->getRead());
                     }
                 }
             }
-
-
             return new Response(json_encode($tmp2));
         }
     }

@@ -1,8 +1,11 @@
+var intervalConversation;
+
 //funcion para poder coger siempre el usuario que se ha logueado
 function currentUser(){
         var user = document.getElementById('titulo_').innerHTML.substring(9,document.getElementById('titulo_').innerHTML.length);
         return user;
 }
+
 /* PETICIONES AJAX */
 
 //Busca en la BBDD los chats de el usuario
@@ -60,7 +63,7 @@ function cargarGroups(){
 
 //Abre la conversacion con el usuario y actualiza el estado de leido o no leido
 function onClick() {
-    //clearInterval(intervalConversation);
+    clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
@@ -68,6 +71,22 @@ function onClick() {
     updateRead(destUser); //linea comentada hasta solucionar el problema
     document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
+    var ruta = Routing.generate('GetConversation');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(destUser),
+        success: function (data){
+            cargarConversacion(JSON.parse(data));
+            intervalConversation = setInterval(updateConver,750,destUser);
+        }
+    });
+}
+
+//actualiza la conversacion
+function updateConver(destUser){
     var ruta = Routing.generate('GetConversation');
     $.ajax({
         type: 'POST',
@@ -95,6 +114,7 @@ function enviarMensaje(){
         dataType: 'text',
         data: JSON.stringify([destUser,body,date]),
         success: function (data){
+            document.getElementById('input_msg').value = '';
             console.log(JSON.parse(data));
         }
     });
@@ -114,6 +134,8 @@ function updateRead(destUser){
         }
     });
 }
+
+
 
 /* FIN PETICIONES AJAX */
 //Esta funcion carga los chats de un suario en la página
