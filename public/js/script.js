@@ -229,12 +229,13 @@ function addFriends()
 {
     var username=prompt('Introduce the +username');
     var ruta = Routing.generate('addFriends');
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 $.ajax({
                     type: 'POST',
                     url: ruta,
                     async: true,
                     dataType: 'text',
-                    data: JSON.stringify(username),
+                    data: JSON.stringify([username,date]),
                     success: function (data){
                          alert('Usuario creado correectamente');
                     }
