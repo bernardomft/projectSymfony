@@ -103,7 +103,7 @@ function onClick2() {
         data: JSON.stringify(group),
         success: function (data) {
             cargarConversacion(JSON.parse(data));
-            //intervalConversation = setInterval(updateConver,750,destUser);
+            intervalConversation = setInterval(updateConverGroup,750,group);
         }
     });
 }
@@ -117,6 +117,20 @@ function updateConver(destUser) {
         async: true,
         dataType: 'text',
         data: JSON.stringify(destUser),
+        success: function (data) {
+            cargarConversacion(JSON.parse(data));
+        }
+    });
+}
+
+function updateConverGroup(group) {
+    var ruta = Routing.generate('GetConversationGroup');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(group),
         success: function (data) {
             cargarConversacion(JSON.parse(data));
         }
