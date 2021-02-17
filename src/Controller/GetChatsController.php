@@ -127,11 +127,13 @@ class GetChatsController extends AbstractController
                 foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
                     if ($tmp2 === $destUser[0]->getCode()) {
-                        array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
-                        array_push($arrayTmp, $t->getIdMsg()->getBody());
-                        array_push($arrayTmp, $t->getIdMsg()->getTime());
-                        array_push($arrayMsg, $arrayTmp);
-                        $arrayTmp = [];
+                        if(!($t->getIdMsg()->getBody() === 'asdfgh1234')){
+                            array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
+                            array_push($arrayTmp, $t->getIdMsg()->getBody());
+                            array_push($arrayTmp, $t->getIdMsg()->getTime());
+                            array_push($arrayMsg, $arrayTmp);
+                            $arrayTmp = [];
+                        }
                     }
                 }
             }
@@ -142,11 +144,14 @@ class GetChatsController extends AbstractController
                 foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
                     if ($tmp2 === $user->getCode()) {
-                        array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
-                        array_push($arrayTmp, $t->getIdMsg()->getBody());
-                        array_push($arrayTmp, $t->getIdMsg()->getTime());
-                        array_push($arrayMsg, $arrayTmp);
-                        $arrayTmp = [];
+                        if(!($t->getIdMsg()->getBody() === 'asdfgh1234')){
+                            array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
+                            array_push($arrayTmp, $t->getIdMsg()->getBody());
+                            array_push($arrayTmp, $t->getIdMsg()->getTime());
+                            array_push($arrayMsg, $arrayTmp);
+                            $arrayTmp = [];
+                        }
+                        
                     }
                 }
             }
@@ -295,21 +300,8 @@ class GetChatsController extends AbstractController
                 array_push($arrayTmp, $g->getIdMsg()->getBody());
                 array_push($arrayTmp, $g->getIdMsg()->getTime());
                 array_push($arrayMsg, $arrayTmp);
+                $arrayTmp = [];
             }
-
-            /*foreach ($messages_user as $m) {
-                $tmp = $m->getSentTo();
-                foreach ($tmp as $t) {
-                    $tmp2 = $t->getIdDestUser()->getCode();
-                    if ($tmp2 === $destUser[0]->getCode()) {
-                        array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
-                        array_push($arrayTmp, $t->getIdMsg()->getBody());
-                        array_push($arrayTmp, $t->getIdMsg()->getTime());
-                        array_push($arrayMsg, $arrayTmp);
-                        $arrayTmp = [];
-                    }
-                }
-            }*/
             return new Response(json_encode($arrayMsg));
         }
     }
