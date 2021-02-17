@@ -13,9 +13,9 @@ use App\Entity\Message;
 use Symfony\Component\Validator\Constraints\IsFalse;
 use Doctrine\ORM\Mapping as ORM;
 
-class GetChatsController extends AbstractController 
+class GetChatsController extends AbstractController
 {
-    
+
     /**
      * @Route("/GetChats",  options={"expose"=true} , name="GetChats" ,methods={"POST", "GET"})
      * 
@@ -24,7 +24,7 @@ class GetChatsController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $tmp = $this->getUser();
-            $message=$tmp->getMessages();
+            $message = $tmp->getMessages();
             $arrayTmp = [];
             $arrayTmp2 = [];
             $arrayTmp3 = [];
@@ -32,27 +32,27 @@ class GetChatsController extends AbstractController
                 array_push($arrayTmp, $a->getSentTo());
             }
             foreach ($arrayTmp as $a) {
-                foreach($a as $b){
+                foreach ($a as $b) {
                     array_push($arrayTmp2, $b->getIdDestUser());
                 }
             }
             $arrayTmp = [];
             foreach ($arrayTmp2 as $a) {
-                if(!(in_array($a->getUsername(),$arrayTmp)))
+                if (!(in_array($a->getUsername(), $arrayTmp)))
                     array_push($arrayTmp, $a->getUsername());
             }
             $arrayTmp2 = [];
             $repository = $this->getDoctrine()->getRepository(SentTo::class);
-            $destino = $repository->findBy(array('idDestUser' =>$tmp->getCode() ));
-            foreach($destino as $a){
+            $destino = $repository->findBy(array('idDestUser' => $tmp->getCode()));
+            foreach ($destino as $a) {
                 array_push($arrayTmp3, $a->getIdMsg());
             }
-            foreach($arrayTmp3 as $a){
+            foreach ($arrayTmp3 as $a) {
                 array_push($arrayTmp2, $a->getOriginUser());
             }
             $arrayTmp3 = [];
-            foreach($arrayTmp2 as $a){
-                if(!(in_array($a->getUsername(),$arrayTmp)))
+            foreach ($arrayTmp2 as $a) {
+                if (!(in_array($a->getUsername(), $arrayTmp)))
                     array_push($arrayTmp, $a->getUsername());
             }
             /*$code_user = $this->getUser()->getCode();
@@ -69,38 +69,39 @@ class GetChatsController extends AbstractController
         }
     }
 
-     /**
+    /**
      * @Route("/CheckReadChats",  options={"expose"=true} , name="CheckReadChats" ,methods={"POST", "GET"})
      * 
      */
-    public function CheckReadChats(Request $request){
-        if ($request->isXmlHttpRequest()){
+    public function CheckReadChats(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
             $user = $this->getUser()->getCode();
-            $dest=json_decode($request->getContent());
+            $dest = json_decode($request->getContent());
             $repository = $this->getDoctrine()->getRepository(Users::class);
             $destino = $repository->findBy(array('username' => $dest));
             $arrayTmp = [];
             $arrayTmp2 = [];
-            foreach($destino as $a){
-               array_push($arrayTmp, $a->getMessages());
+            foreach ($destino as $a) {
+                array_push($arrayTmp, $a->getMessages());
             }
-            foreach($arrayTmp as $a){
-                foreach($a as $b){
+            foreach ($arrayTmp as $a) {
+                foreach ($a as $b) {
                     array_push($arrayTmp2, $b->getSentTo());
                 }
-             }
-             $arrayTmp = [];  
-             foreach($arrayTmp2 as $a){
-                foreach($a as $b){
-                    if($b->getIdDestUser()->getCode() == $user)
+            }
+            $arrayTmp = [];
+            foreach ($arrayTmp2 as $a) {
+                foreach ($a as $b) {
+                    if ($b->getIdDestUser()->getCode() == $user)
                         array_push($arrayTmp, $b->getRead());
                 }
-             }
-             foreach($arrayTmp as $a){
-                 if(!$a)
+            }
+            foreach ($arrayTmp as $a) {
+                if (!$a)
                     return new Response(json_encode('false'));
-             }
-            
+            }
+
             return new Response(json_encode('true'));
         }
     }
@@ -114,17 +115,17 @@ class GetChatsController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $arrayMsg = [];
             $arrayTmp = [];
-            $param=json_decode($request->getContent());
+            $param = json_decode($request->getContent());
             $entityManager = $this->getDoctrine()->getManager();
             $destUser = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
             $user = $this->getUser();
             //mensajes de user a destUser
             $messages_user = $user->getMessages();
-            foreach($messages_user as $m){
+            foreach ($messages_user as $m) {
                 $tmp = $m->getSentTo();
-                foreach($tmp as $t){
+                foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
-                    if($tmp2 === $destUser[0]->getCode()){
+                    if ($tmp2 === $destUser[0]->getCode()) {
                         array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
                         array_push($arrayTmp, $t->getIdMsg()->getBody());
                         array_push($arrayTmp, $t->getIdMsg()->getTime());
@@ -135,11 +136,11 @@ class GetChatsController extends AbstractController
             }
             //mensajes de destUser a user
             $messages_dest_user = $destUser[0]->getMessages();
-            foreach($messages_dest_user as $m){
+            foreach ($messages_dest_user as $m) {
                 $tmp = $m->getSentTo();
-                foreach($tmp as $t){
+                foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
-                    if($tmp2 === $user->getCode()){
+                    if ($tmp2 === $user->getCode()) {
                         array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
                         array_push($arrayTmp, $t->getIdMsg()->getBody());
                         array_push($arrayTmp, $t->getIdMsg()->getTime());
@@ -148,7 +149,7 @@ class GetChatsController extends AbstractController
                     }
                 }
             }
-           
+
 
             return new Response(json_encode($arrayMsg));
         }
@@ -164,8 +165,8 @@ class GetChatsController extends AbstractController
             $user = $this->getUser();
             $groups = $user->getGroupUser();
             $arrayTmp = [];
-            foreach($groups as $a){
-                if(!(in_array($a->getIdGroup()->getName(),$arrayTmp)))
+            foreach ($groups as $a) {
+                if (!(in_array($a->getIdGroup()->getName(), $arrayTmp)))
                     array_push($arrayTmp, $a->getIdGroup()->getName());
             }
 
@@ -181,29 +182,65 @@ class GetChatsController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $user = $this->getUser();
-            $tmp2=[];
-            $param=json_decode($request->getContent());
+            $tmp2 = [];
+            $param = json_decode($request->getContent());
             $entityManager = $this->getDoctrine()->getManager();
             $destUser = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
             $messages_dest_user = $destUser[0]->getMessages();
-            foreach($messages_dest_user as $m){
+            foreach ($messages_dest_user as $m) {
                 $tmp = $m->getSentTo();
-                foreach($tmp as $t){
-                    if($t->getIdDestUser()->getCode() === $user->getCode() &&
-                        $t->getRead() == false ){
-                            $t->setRead(1);
+                foreach ($tmp as $t) {
+                    if (
+                        $t->getIdDestUser()->getCode() === $user->getCode() &&
+                        $t->getRead() == 0
+                    ) {
+                        $t->setRead(true);
+                            //$entityManager->persist($t);
                             $entityManager->flush();
-                            $entityManager->persist($t);
+                        /*$entityManager->getConnection()->beginTransaction(); // suspend auto-commit
+                        try {
+                            //... do some work
+                            $t->setRead(1);
+                            //$entityManager->persist($t);
+                            //$entityManager->flush();
+                            $entityManager->getConnection()->commit();
+                        } catch (Exception $e) {
+                            $entityManager->getConnection()->rollBack();
+                            throw $e;
+                        }*/
                         array_push($tmp2, $t->getRead());
                     }
-                } 
+                }
             }
-            
+
 
             return new Response(json_encode($tmp2));
         }
     }
 
+    /**
+     * @Route("/sendMessage",  options={"expose"=true} , name="sendMessage" ,methods={"POST", "GET"})
+     * 
+     */
+    public function sendMessage(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $params = json_decode($request->getContent());
+            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
+            $params[2]=new \DateTime(str_replace(' ', 'T', $params[2]));
+            $msg = new Message();
+            $msg->setBody($params[1]);
+            $msg->setTime($params[2]);
+            $msg->setOriginUser($this->getUser());
+            $entityManager->persist($msg);
+            $sent_to=new SentTo();
+            $sent_to->setIdMsg($msg);
+            $sent_to->setIdDestUser($destUser);
+            $sent_to->setRead(false);
+            $entityManager->persist($sent_to);
+            $entityManager->flush();
+            return new Response(json_encode('mensaje enviado'));
+        }
+    }
 }
-
-

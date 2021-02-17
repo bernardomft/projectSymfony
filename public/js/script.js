@@ -8,6 +8,8 @@ function currentUser(){
 //Busca en la BBDD los chats de el usuario
 //Primera funcion que es llamada
 function cargarChats(){
+    //Añade además el evenlistener de el boton
+    document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
     console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({
@@ -62,7 +64,7 @@ function onClick() {
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
     //userGlobal = user;
-    updateRead(destUser);
+    updateRead(destUser); //linea comentada hasta solucionar el problema
     document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
     var ruta = Routing.generate('GetConversation');
@@ -74,6 +76,24 @@ function onClick() {
         data: JSON.stringify(destUser),
         success: function (data){
             cargarConversacion(JSON.parse(data));
+        }
+    });
+}
+
+function enviarMensaje(){
+    var destUser = document.getElementById('divPerf').innerHTML;
+    //console.log(destUser);
+    var ruta = Routing.generate('sendMessage');
+    var body = document.getElementById('input_msg').value;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify([destUser,body,date]),
+        success: function (data){
+            console.log(JSON.parse(data));
         }
     });
 }

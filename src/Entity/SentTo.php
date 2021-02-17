@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,7 +25,7 @@ class SentTo
     /**
      * @var bool
      *
-     * @ORM\Column(name="read", type="boolean", nullable=false)
+     * @ORM\Column(name="`read`", type="boolean", nullable=false)
      */
     private $read;
 

@@ -37,6 +37,11 @@ div.contenedor-principal .contenedor_conver{
     background-color: #b9ffb0
 }
 
+#divPerf{
+    font-size: 4em;
+    background-color: #b9ffb0
+}
+
 div.conver #form_message{
     width: 100%;
     display: flex;
