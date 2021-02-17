@@ -353,4 +353,26 @@ class GetChatsController extends AbstractController
             return new Response(json_encode($arrayUser));
         }
     }
+
+    /**
+     * @Route("/updateProfile",  options={"expose"=true} , name="updateProfile" ,methods={"POST", "GET"})
+     * 
+     */
+    public function updateProfile(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $params = json_decode($request->getContent());
+            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
+            
+            $destUser->setName($params[1]);
+            $destUser->setAddress($params[2]);
+            $destUser->setEmail($params[3]);
+            $destUser->setPicture($params[4]);
+            
+            $entityManager->flush();
+
+            return new Response(json_encode('Perfil actualizado'));
+        }
+    }
 }
