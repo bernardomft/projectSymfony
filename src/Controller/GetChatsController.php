@@ -204,6 +204,37 @@ class GetChatsController extends AbstractController
         }
     }
 
+    /**
+     * @Route("/addFriends",  options={"expose"=true} , name="addFriends" ,methods={"POST", "GET"})
+     * 
+     */
+    public function addFriend(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $param=json_decode($request->getContent());
+            $message=new Message();
+            $message2=new Message();
+            $user=$this->getuser();
+            
+            $message->setBody('asdfgh1234');
+            $message->setOriginUser($user);
+        
+            $entityManager = $this->getDoctrine()->getManager();
+            $destUser = $entityManager->getRepository(Users::class)->findBy(['code' => $param]);
+
+            $message2->setBody('asdfgh1234');
+            $message2->setOriginUser($destUser);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($message);
+            $em->persist($message2);
+            $em->flush();
+           
+        }
+        return new Response(json_encode($user->getCode()));
+    }
+
 }
 
 

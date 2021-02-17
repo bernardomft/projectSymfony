@@ -8,6 +8,7 @@ function currentUser(){
 //Busca en la BBDD los chats de el usuario
 //Primera funcion que es llamada
 function cargarChats(){
+    document.getElementById('addFriends').addEventListener('click',addFriends)
     console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({
@@ -159,6 +160,22 @@ function cargarConversacion(arrayMsg) {
 
 
 
+//Add friends
+function addFriends()
+{
+    var username=prompt('Introduce the +username');
+    var ruta = Routing.generate('addFriends');
+                $.ajax({
+                    type: 'POST',
+                    url: ruta,
+                    async: true,
+                    dataType: 'text',
+                    data: JSON.stringify(username),
+                    success: function (data){
+                         alert('Usuario creado correectamente');
+                    }
+                });
+}
 
 
 window.onload=cargarChats;

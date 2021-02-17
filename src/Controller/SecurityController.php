@@ -54,7 +54,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-        }
+        }   
        
         return new Response(json_encode($param[0]));
         return $this->render('security/login.html.twig');
