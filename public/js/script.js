@@ -8,7 +8,8 @@ function currentUser(){
 //Busca en la BBDD los chats de el usuario
 //Primera funcion que es llamada
 function cargarChats(){
-    document.getElementById('addFriends').addEventListener('click',addFriends)
+    //Añade además el evenlistener de el boton
+    document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
     console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({
@@ -57,13 +58,14 @@ function cargarGroups(){
     });
 }
 
+//Abre la conversacion con el usuario y actualiza el estado de leido o no leido
 function onClick() {
     //clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
     //userGlobal = user;
-    updateRead(destUser);
+    updateRead(destUser); //linea comentada hasta solucionar el problema
     document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
     var ruta = Routing.generate('GetConversation');
@@ -79,6 +81,26 @@ function onClick() {
     });
 }
 
+//envia un mensaje
+function enviarMensaje(){
+    var destUser = document.getElementById('divPerf').innerHTML;
+    //console.log(destUser);
+    var ruta = Routing.generate('sendMessage');
+    var body = document.getElementById('input_msg').value;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify([destUser,body,date]),
+        success: function (data){
+            console.log(JSON.parse(data));
+        }
+    });
+}
+
+//atualiza el estado de los mensajes. leidos o no,
 function updateRead(destUser){
     var ruta = Routing.generate('UpdateRead');
     $.ajax({
@@ -112,6 +134,7 @@ function createChats(chats) {
     }
 }
 
+//Esta funcion carga los grupos de un suario en la página
 function createGroups(grupos) {
     gruposGlobal = [];
     gruposGlobal = grupos;
@@ -135,7 +158,7 @@ function deleteChats() {
         ele.removeChild(ele.lastChild);
 }
 
-//cargra la ocnversacion al hacer click
+//cargra la ocnversacion después de recibirla haciendo click
 function cargarConversacion(arrayMsg) {
     for (var i = 0; i < arrayMsg.length; i++) {
         var tmp = arrayMsg[i][2].date;
@@ -160,22 +183,6 @@ function cargarConversacion(arrayMsg) {
 
 
 
-//Add friends
-function addFriends()
-{
-    var username=prompt('Introduce the +username');
-    var ruta = Routing.generate('addFriends');
-                $.ajax({
-                    type: 'POST',
-                    url: ruta,
-                    async: true,
-                    dataType: 'text',
-                    data: JSON.stringify(username),
-                    success: function (data){
-                         alert('Usuario creado correectamente');
-                    }
-                });
-}
 
 
 window.onload=cargarChats;
