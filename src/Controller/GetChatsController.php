@@ -225,28 +225,42 @@ class GetChatsController extends AbstractController
     public function addFriend(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
+
+            $em = $this->getDoctrine()->getManager();
             $param=json_decode($request->getContent());
             $message=new Message();
             $message2=new Message();
-            $user=$this->getuser();
+            $user=$this->getUser();
+            $destUser = $em->getRepository(Users::class)->findOneBy(['username' => $param[0]]);
+            $fecha=new \DateTime(str_replace(' ', 'T', $param[1]));
             
-            $message->setIdMsg(null);
+            
             $message->setBody('asdfgh1234');
+            $message->setTime($fecha);
             $message->setOriginUser($user);
-        
-            $entityManager = $this->getDoctrine()->getManager();
-            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['code' => $param]);
-
-            $message2->setIdMsg(null);
-            $message2->setBody('asdfgh1234');
-            $message2->setOriginUser($destUser);
-
-            $em = $this->getDoctrine()->getManager();
-
             $em->persist($message);
+            $sent_to=new SentTo();
+            $sent_to->setIdMsg($message);
+            $sent_to->setIdDestUser($destUser);
+            $sent_to->setRead(false);
+            $em->persist($sent_to);
+            
+            
+
+     
+            $message2->setBody('asdfgh1234');
+            $message2->setTime($fecha);
+            $message2->setOriginUser($destUser);
             $em->persist($message2);
+            $sent_to2=new SentTo();
+            $sent_to2->setIdMsg($message2);
+            $sent_to2->setIdDestUser($user);
+            $sent_to2->setRead(false);
+            $em->persist($sent_to2);
+
+                       
             $em->flush();
-           
+         
         }
         return new Response(json_encode($user->getCode()));
     }
