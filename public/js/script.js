@@ -85,6 +85,28 @@ function onClick() {
     });
 }
 
+function onClick2() {
+    clearInterval(intervalConversation);
+    while (document.getElementById('conver_id').firstChild)
+        document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
+    var group = this.id.substring(6, this.id.length);
+    //updateRead(destUser); //linea comentada hasta solucionar el problema
+    document.getElementById('divPerf').innerHTML = '' + group;
+    document.getElementById(this.id).style.color = '#FFFFFF';
+    var ruta = Routing.generate('GetConversationGroup');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(group),
+        success: function (data){
+            cargarConversacion(JSON.parse(data));
+            //intervalConversation = setInterval(updateConver,750,destUser);
+        }
+    });
+}
+
 //actualiza la conversacion
 function updateConver(destUser){
     var ruta = Routing.generate('GetConversation');
@@ -158,13 +180,11 @@ function createChats(chats) {
 
 //Esta funcion carga los grupos de un suario en la página
 function createGroups(grupos) {
-    gruposGlobal = [];
-    gruposGlobal = grupos;
     for (var i = 0; i < grupos.length; i++) {
         var ele = document.createElement('div');
         ele.id = 'group_' + grupos[i];
         ele.style.textAlign = 'center';
-        //ele.addEventListener("click", onClick2)
+        ele.addEventListener("click", onClick2)
         var p = document.createElement('p');
         p.innerHTML = grupos[i];
         p.style.margin = '10px';
