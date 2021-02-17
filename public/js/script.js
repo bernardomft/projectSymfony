@@ -10,6 +10,7 @@ function currentUser(){
 function cargarChats(){
     //Añade además el evenlistener de el boton
     document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
+    document.getElementById('addFriends').addEventListener('click',addFriends)
     console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({

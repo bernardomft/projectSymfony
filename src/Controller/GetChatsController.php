@@ -247,7 +247,7 @@ class GetChatsController extends AbstractController
             
             
 
-     
+     /*
             $message2->setBody('asdfgh1234');
             $message2->setTime($fecha);
             $message2->setOriginUser($destUser);
@@ -257,7 +257,7 @@ class GetChatsController extends AbstractController
             $sent_to2->setIdDestUser($user);
             $sent_to2->setRead(false);
             $em->persist($sent_to2);
-
+*/
                        
             $em->flush();
          
