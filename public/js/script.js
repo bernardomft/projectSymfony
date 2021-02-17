@@ -182,7 +182,22 @@ function cargarConversacion(arrayMsg) {
 }
 
 
-
+//Add friends
+function addFriends()
+{
+    var username=prompt('Introduce the +username');
+    var ruta = Routing.generate('addFriends');
+                $.ajax({
+                    type: 'POST',
+                    url: ruta,
+                    async: true,
+                    dataType: 'text',
+                    data: JSON.stringify(username),
+                    success: function (data){
+                         alert('Usuario creado correectamente');
+                    }
+                });
+}
 
 
 window.onload=cargarChats;
