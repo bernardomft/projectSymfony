@@ -305,4 +305,22 @@ class GetChatsController extends AbstractController
             return new Response(json_encode($arrayMsg));
         }
     }
+
+    /**
+     * @Route("/showProfile",  options={"expose"=true} , name="showProfile" ,methods={"POST", "GET"})
+     * 
+     */
+    public function showProfile(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $params = json_decode($request->getContent());
+            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params]);
+            $arrayUser=[];
+            array_push($arrayUser,$destUser->getName());
+
+
+            return new Response(json_encode($arrayUser));
+        }
+    }
 }

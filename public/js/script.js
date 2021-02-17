@@ -154,7 +154,7 @@ function updateRead(destUser) {
         dataType: 'text',
         data: JSON.stringify(destUser),
         success: function (data) {
-            console.log(JSON.parse(data));
+            
         }
     });
 }
@@ -176,13 +176,76 @@ function addFriends() {
     });
 }
 
-
+//cargar perfil
 function perfil()
 {
     clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
+    var ruta = Routing.generate('showProfile');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(destUser),
+        success: function (data) {
+            /*
+            var label = document.createElement('label');
+            label.innerHTML = 'Name: ';
+            var p = document.createElement('textarea');
+            p.innerHTML = '' + user.name;
+            p.id = 'name';
+            p.className = 'textarea';
+            var label1 = document.createElement('label1');
+            label1.innerHTML = 'Address: ';
+            var p1 = document.createElement('textarea');
+            p1.innerHTML = '' + user.address;
+            p1.id = 'address';
+            p1.className = 'textarea';
+            var label2 = document.createElement('label2');
+            label2.innerHTML = 'Gmail: ';
+            var p2 = document.createElement('textarea');
+            p2.innerHTML = '' + user.email;
+            p2.id = 'mail';
+            p2.className = 'textarea';
+            var updateBttn = document.createElement('button');
+            //updateBttn.addEventListener('click', updateInfo);
+            updateBttn.innerHTML = 'Update';
+            var form = document.createElement('form');
+            form.action = 'update_profile.php';
+            form.id = 'formImg';
+            form.method = 'post';
+            form.enctype = 'multipart/form-data';
+            var foto = document.createElement('input');
+            foto.setAttribute("type", "file");
+            foto.name = 'myfile';
+            foto.id = 'myfile';
+            foto.accept = 'image/*';
+            foto.style.float = 'left';
+            var img = document.createElement('img');
+            img.src = user.picture;
+            img.setAttribute('url', user.picture);
+            img.style.width = '100px';
+            img.style.height = '100px';
+            img.style.float = 'left';
+            document.getElementById('conver_id').appendChild(img);
+            document.getElementById('conver_id').appendChild(label);
+            document.getElementById('conver_id').appendChild(p);
+            document.getElementById('conver_id').appendChild(label1);
+            document.getElementById('conver_id').appendChild(p1);
+            document.getElementById('conver_id').appendChild(label2);
+            document.getElementById('conver_id').appendChild(p2);
+            document.getElementById('conver_id').appendChild(updateBttn);
+            document.getElementById('conver_id').appendChild(form);
+            form.appendChild(foto);
+            */
+           console.log(data);
+        }
+    });
+    
+
 }
 
 
@@ -249,6 +312,8 @@ function cargarConversacion(arrayMsg) {
         objDiv.scrollTop = objDiv.scrollHeight;
     }
 }
+
+
 
 
 
