@@ -13,7 +13,8 @@ function currentUser() {
 function cargarChats() {
     //Añade además el evenlistener de el boton
     document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
-    document.getElementById('addFriends').addEventListener('click',addFriends)
+    document.getElementById('addFriends').addEventListener('click',addFriends);
+    document.getElementById('divPerf').addEventListener('click',perfil);
     console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({
@@ -81,7 +82,7 @@ function onClick() {
         data: JSON.stringify(destUser),
         success: function (data) {
             cargarConversacion(JSON.parse(data));
-            intervalConversation = setInterval(updateConver, 750, destUser);
+            intervalConversation = setInterval(updateConver, 2000, destUser);
         }
     });
 }
@@ -173,6 +174,15 @@ function addFriends() {
             alert('Usuario creado correectamente');
         }
     });
+}
+
+
+function perfil()
+{
+    clearInterval(intervalConversation);
+    while (document.getElementById('conver_id').firstChild)
+        document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
+    var destUser = this.id.substring(5, this.id.length);
 }
 
 
