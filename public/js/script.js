@@ -220,7 +220,7 @@ function perfil()
     clearInterval(intervalConversation);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
-    var destUser = this.id.substring(5, this.id.length);
+    var destUser = document.getElementById('divPerf').innerHTML
     var ruta = Routing.generate('showProfile');
     $.ajax({
         type: 'POST',
@@ -229,23 +229,23 @@ function perfil()
         dataType: 'text',
         data: JSON.stringify(destUser),
         success: function (data) {
-            /*
+            var arrayTmp=JSON.parse(data);
             var label = document.createElement('label');
             label.innerHTML = 'Name: ';
             var p = document.createElement('textarea');
-            p.innerHTML = '' + user.name;
+            p.innerHTML = '' + arrayTmp[0];
             p.id = 'name';
             p.className = 'textarea';
             var label1 = document.createElement('label1');
             label1.innerHTML = 'Address: ';
             var p1 = document.createElement('textarea');
-            p1.innerHTML = '' + user.address;
+            p1.innerHTML = '' + arrayTmp[1];
             p1.id = 'address';
             p1.className = 'textarea';
             var label2 = document.createElement('label2');
             label2.innerHTML = 'Gmail: ';
             var p2 = document.createElement('textarea');
-            p2.innerHTML = '' + user.email;
+            p2.innerHTML = '' + arrayTmp[2];
             p2.id = 'mail';
             p2.className = 'textarea';
             var updateBttn = document.createElement('button');
@@ -256,18 +256,21 @@ function perfil()
             form.id = 'formImg';
             form.method = 'post';
             form.enctype = 'multipart/form-data';
+            
             var foto = document.createElement('input');
             foto.setAttribute("type", "file");
             foto.name = 'myfile';
             foto.id = 'myfile';
             foto.accept = 'image/*';
             foto.style.float = 'left';
+        
             var img = document.createElement('img');
-            img.src = user.picture;
-            img.setAttribute('url', user.picture);
+            img.src = arrayTmp[3];
+            img.setAttribute('url', arrayTmp[3]);
             img.style.width = '100px';
             img.style.height = '100px';
             img.style.float = 'left';
+           
             document.getElementById('conver_id').appendChild(img);
             document.getElementById('conver_id').appendChild(label);
             document.getElementById('conver_id').appendChild(p);
@@ -278,12 +281,28 @@ function perfil()
             document.getElementById('conver_id').appendChild(updateBttn);
             document.getElementById('conver_id').appendChild(form);
             form.appendChild(foto);
-            */
-           console.log(data);
+            
+           console.log();
         }
     });
-    
+}
 
+function updateInfo() {
+    var name = document.getElementById('name').value;
+    var address = document.getElementById('address').value;
+    var mail = document.getElementById('mail').value;
+    var foto = document.getElementById('myfile').value;
+    document.getElementById('formImg').submit();
+    var ruta = Routing.generate('showProfile');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(destUser),
+        success: function (data) {
+        }
+    });
 }
 
 
