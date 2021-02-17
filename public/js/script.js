@@ -1,16 +1,16 @@
 var intervalConversation;
 
 //funcion para poder coger siempre el usuario que se ha logueado
-function currentUser(){
-        var user = document.getElementById('titulo_').innerHTML.substring(9,document.getElementById('titulo_').innerHTML.length);
-        return user;
+function currentUser() {
+    var user = document.getElementById('titulo_').innerHTML.substring(9, document.getElementById('titulo_').innerHTML.length);
+    return user;
 }
 
 /* PETICIONES AJAX */
 
 //Busca en la BBDD los chats de el usuario
 //Primera funcion que es llamada
-function cargarChats(){
+function cargarChats() {
     //Añade además el evenlistener de el boton
     document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
     console.log('tu raza gitana ' + currentUser());
@@ -20,7 +20,7 @@ function cargarChats(){
         url: ruta,
         async: true,
         dataType: 'text',
-        success: function (data){
+        success: function (data) {
             deleteChats();
             createChats(JSON.parse(data));
             //console.log(JSON.parse(data));
@@ -31,7 +31,7 @@ function cargarChats(){
 }
 
 //comprueba que el usuario no tengo mensajes sin leer
-function checkRead(chat){
+function checkRead(chat) {
     var ruta = Routing.generate('CheckReadChats');
     $.ajax({
         type: 'POST',
@@ -39,7 +39,7 @@ function checkRead(chat){
         async: true,
         dataType: 'text',
         data: JSON.stringify(chat),
-        success: function (data){
+        success: function (data) {
             if (JSON.parse(data) === "false") {
                 document.getElementById('chat_' + chat).style.color = 'red';
             }
@@ -48,14 +48,14 @@ function checkRead(chat){
 }
 
 //Busca en la BBDD los grupos de el usuario
-function cargarGroups(){
+function cargarGroups() {
     var ruta = Routing.generate('GetGroups');
     $.ajax({
         type: 'POST',
         url: ruta,
         async: true,
         dataType: 'text',
-        success: function (data){
+        success: function (data) {
             createGroups(JSON.parse(data));
         }
     });
@@ -78,9 +78,9 @@ function onClick() {
         async: true,
         dataType: 'text',
         data: JSON.stringify(destUser),
-        success: function (data){
+        success: function (data) {
             cargarConversacion(JSON.parse(data));
-            intervalConversation = setInterval(updateConver,750,destUser);
+            intervalConversation = setInterval(updateConver, 750, destUser);
         }
     });
 }
@@ -100,7 +100,7 @@ function onClick2() {
         async: true,
         dataType: 'text',
         data: JSON.stringify(group),
-        success: function (data){
+        success: function (data) {
             cargarConversacion(JSON.parse(data));
             //intervalConversation = setInterval(updateConver,750,destUser);
         }
@@ -108,7 +108,7 @@ function onClick2() {
 }
 
 //actualiza la conversacion
-function updateConver(destUser){
+function updateConver(destUser) {
     var ruta = Routing.generate('GetConversation');
     $.ajax({
         type: 'POST',
@@ -116,14 +116,14 @@ function updateConver(destUser){
         async: true,
         dataType: 'text',
         data: JSON.stringify(destUser),
-        success: function (data){
+        success: function (data) {
             cargarConversacion(JSON.parse(data));
         }
     });
 }
 
 //envia un mensaje
-function enviarMensaje(){
+function enviarMensaje() {
     var destUser = document.getElementById('divPerf').innerHTML;
     //console.log(destUser);
     var ruta = Routing.generate('sendMessage');
@@ -134,8 +134,8 @@ function enviarMensaje(){
         url: ruta,
         async: true,
         dataType: 'text',
-        data: JSON.stringify([destUser,body,date]),
-        success: function (data){
+        data: JSON.stringify([destUser, body, date]),
+        success: function (data) {
             document.getElementById('input_msg').value = '';
             console.log(JSON.parse(data));
         }
@@ -143,7 +143,7 @@ function enviarMensaje(){
 }
 
 //atualiza el estado de los mensajes. leidos o no,
-function updateRead(destUser){
+function updateRead(destUser) {
     var ruta = Routing.generate('UpdateRead');
     $.ajax({
         type: 'POST',
@@ -151,12 +151,28 @@ function updateRead(destUser){
         async: true,
         dataType: 'text',
         data: JSON.stringify(destUser),
-        success: function (data){
+        success: function (data) {
             console.log(JSON.parse(data));
         }
     });
 }
 
+//Add friends
+function addFriends() {
+    var username = prompt('Introduce the +username');
+    var ruta = Routing.generate('addFriends');
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify([username, date]),
+        success: function (data) {
+            alert('Usuario creado correectamente');
+        }
+    });
+}
 
 
 /* FIN PETICIONES AJAX */
@@ -224,23 +240,7 @@ function cargarConversacion(arrayMsg) {
 }
 
 
-//Add friends
-function addFriends()
-{
-    var username=prompt('Introduce the +username');
-    var ruta = Routing.generate('addFriends');
-    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                $.ajax({
-                    type: 'POST',
-                    url: ruta,
-                    async: true,
-                    dataType: 'text',
-                    data: JSON.stringify([username,date]),
-                    success: function (data){
-                         alert('Usuario creado correectamente');
-                    }
-                });
-}
 
 
-window.onload=cargarChats;
+
+window.onload = cargarChats;
