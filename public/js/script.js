@@ -66,6 +66,9 @@ function cargarGroups() {
 //Abre la conversacion con el usuario y actualiza el estado de leido o no leido
 function onClick() {
     clearInterval(intervalConversation);
+    if(document.getElementById('botonEnviar').removeEventListener('click', enviarMensajeGroup, true));
+        document.getElementById('botonEnviar').removeEventListener('click', enviarMensaje, true);
+    document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
@@ -89,6 +92,8 @@ function onClick() {
 
 function onClick2() {
     clearInterval(intervalConversation);
+    document.getElementById('botonEnviar').removeEventListener('click', enviarMensaje);
+    document.getElementById('botonEnviar').addEventListener('click', enviarMensajeGroup);
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var group = this.id.substring(6, this.id.length);
@@ -151,6 +156,25 @@ function enviarMensaje() {
         async: true,
         dataType: 'text',
         data: JSON.stringify([destUser, body, date]),
+        success: function (data) {
+            document.getElementById('input_msg').value = '';
+            console.log(JSON.parse(data));
+        }
+    });
+}
+
+function enviarMensajeGroup() {
+    var group = document.getElementById('divPerf').innerHTML;
+    console.log(group);
+    var ruta = Routing.generate('sendMessageGroup');
+    var body = document.getElementById('input_msg').value;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify([group, body, date]),
         success: function (data) {
             document.getElementById('input_msg').value = '';
             console.log(JSON.parse(data));

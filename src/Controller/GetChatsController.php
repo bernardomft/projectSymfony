@@ -284,6 +284,32 @@ class GetChatsController extends AbstractController
     }
 
     /**
+     * @Route("/sendMessageGroup",  options={"expose"=true} , name="sendMessageGroup" ,methods={"POST", "GET"})
+     * 
+     */
+    public function sendMessageGroup(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $params = json_decode($request->getContent());
+            $group_name = $entityManager->getRepository(Groups::class)->findOneBy(['name' => $params[0]]);
+            $params[2]=new \DateTime(str_replace(' ', 'T', $params[2]));
+            $msg = new Message();
+            $msg->setBody($params[1]);
+            $msg->setTime($params[2]);
+            $msg->setOriginUser($this->getUser());
+            $entityManager->persist($msg);
+            $group=new Groups();
+            $group->setIdMsg($msg);
+            $group->setIdUser($this->getUser()->getCode());
+            $group->setName($params[0]);
+            $entityManager->persist($group);
+            $entityManager->flush();
+            return new Response(json_encode('mensaje enviado'));
+        }
+    }
+
+    /**
      * @Route("/GetConversationGroup",  options={"expose"=true} , name="GetConversationGroup" ,methods={"POST", "GET"})
      * 
      */
