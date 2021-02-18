@@ -39,12 +39,13 @@ class SecurityController extends AbstractController
         if ($request->isXmlHttpRequest())
         {
             $param=json_decode($request->getContent());
+            $password=password_hash($param[4], PASSWORD_BCRYPT);
             $user = new Users();
             $user->setUsername($param[0]); 
             $user->setName($param[1]); 
             $user->setSurname($param[2]); 
             $user->setEmail($param[3]); 
-            $user->setPassword($param[4]);
+            $user->setPassword($password);
             $user->setAddress('');
             $user->setPicture('');
             $user->setRole(0);
