@@ -127,7 +127,7 @@ class GetChatsController extends AbstractController
                 foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
                     if ($tmp2 === $destUser[0]->getCode()) {
-                        if(!($t->getIdMsg()->getBody() === 'asdfgh1234')){
+                        if (!($t->getIdMsg()->getBody() === 'asdfgh1234')) {
                             array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
                             array_push($arrayTmp, $t->getIdMsg()->getBody());
                             array_push($arrayTmp, $t->getIdMsg()->getTime());
@@ -144,14 +144,13 @@ class GetChatsController extends AbstractController
                 foreach ($tmp as $t) {
                     $tmp2 = $t->getIdDestUser()->getCode();
                     if ($tmp2 === $user->getCode()) {
-                        if(!($t->getIdMsg()->getBody() === 'asdfgh1234')){
+                        if (!($t->getIdMsg()->getBody() === 'asdfgh1234')) {
                             array_push($arrayTmp, $t->getIdMsg()->getOriginUser()->getUsername());
                             array_push($arrayTmp, $t->getIdMsg()->getBody());
                             array_push($arrayTmp, $t->getIdMsg()->getTime());
                             array_push($arrayMsg, $arrayTmp);
                             $arrayTmp = [];
                         }
-                        
                     }
                 }
             }
@@ -219,40 +218,39 @@ class GetChatsController extends AbstractController
         if ($request->isXmlHttpRequest()) {
 
             $em = $this->getDoctrine()->getManager();
-            $param=json_decode($request->getContent());
-            $message=new Message();
-            $message2=new Message();
-            $user=$this->getUser();
+            $param = json_decode($request->getContent());
+            $message = new Message();
+            $message2 = new Message();
+            $user = $this->getUser();
             $destUser = $em->getRepository(Users::class)->findOneBy(['username' => $param[0]]);
-            $fecha=new \DateTime(str_replace(' ', 'T', $param[1]));
-            
-            
+            $fecha = new \DateTime(str_replace(' ', 'T', $param[1]));
+
+
             $message->setBody('asdfgh1234');
             $message->setTime($fecha);
             $message->setOriginUser($user);
             $em->persist($message);
-            $sent_to=new SentTo();
+            $sent_to = new SentTo();
             $sent_to->setIdMsg($message);
             $sent_to->setIdDestUser($destUser);
             $sent_to->setRead(false);
             $em->persist($sent_to);
-            
-            
 
-     
+
+
+
             $message2->setBody('asdfgh1234');
             $message2->setTime($fecha);
             $message2->setOriginUser($destUser);
             $em->persist($message2);
-            $sent_to2=new SentTo();
+            $sent_to2 = new SentTo();
             $sent_to2->setIdMsg($message2);
             $sent_to2->setIdDestUser($user);
             $sent_to2->setRead(false);
             $em->persist($sent_to2);
 
-                       
+
             $em->flush();
-         
         }
         return new Response(json_encode($user->getCode()));
     }
@@ -267,13 +265,13 @@ class GetChatsController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $params = json_decode($request->getContent());
             $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
-            $params[2]=new \DateTime(str_replace(' ', 'T', $params[2]));
+            $params[2] = new \DateTime(str_replace(' ', 'T', $params[2]));
             $msg = new Message();
             $msg->setBody($params[1]);
             $msg->setTime($params[2]);
             $msg->setOriginUser($this->getUser());
             $entityManager->persist($msg);
-            $sent_to=new SentTo();
+            $sent_to = new SentTo();
             $sent_to->setIdMsg($msg);
             $sent_to->setIdDestUser($destUser);
             $sent_to->setRead(false);
@@ -293,13 +291,13 @@ class GetChatsController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $params = json_decode($request->getContent());
             $group_name = $entityManager->getRepository(Groups::class)->findOneBy(['name' => $params[0]]);
-            $params[2]=new \DateTime(str_replace(' ', 'T', $params[2]));
+            $params[2] = new \DateTime(str_replace(' ', 'T', $params[2]));
             $msg = new Message();
             $msg->setBody($params[1]);
             $msg->setTime($params[2]);
             $msg->setOriginUser($this->getUser());
             $entityManager->persist($msg);
-            $group=new Groups();
+            $group = new Groups();
             $group->setIdMsg($msg);
             $group->setIdUser($this->getUser()->getCode());
             $group->setName($params[0]);
@@ -321,7 +319,7 @@ class GetChatsController extends AbstractController
             $arrayTmp = [];
             $entityManager = $this->getDoctrine()->getManager();
             $group = $entityManager->getRepository(Groups::class)->findBy(['name' => $param]);
-            foreach($group as $g){
+            foreach ($group as $g) {
                 array_push($arrayTmp, $g->getIdMsg()->getOriginUser()->getUsername());
                 array_push($arrayTmp, $g->getIdMsg()->getBody());
                 array_push($arrayTmp, $g->getIdMsg()->getTime());
@@ -342,13 +340,13 @@ class GetChatsController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $params = json_decode($request->getContent());
             $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params]);
-            $arrayUser=[];
-            array_push($arrayUser,$destUser->getName());
-            array_push($arrayUser,$destUser->getAddress());
-            array_push($arrayUser,$destUser->getEmail());
-            array_push($arrayUser,$destUser->getPicture());
-            
-            
+            $arrayUser = [];
+            array_push($arrayUser, $destUser->getName());
+            array_push($arrayUser, $destUser->getAddress());
+            array_push($arrayUser, $destUser->getEmail());
+            array_push($arrayUser, $destUser->getPicture());
+
+
 
             return new Response(json_encode($arrayUser));
         }
@@ -364,15 +362,45 @@ class GetChatsController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $params = json_decode($request->getContent());
             $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
-            
+
             $destUser->setName($params[1]);
             $destUser->setAddress($params[2]);
             $destUser->setEmail($params[3]);
             $destUser->setPicture($params[4]);
-            
+
             $entityManager->flush();
 
             return new Response(json_encode('Perfil actualizado'));
+        }
+    }
+    /** @Route("/sendDiffMessage",  options={"expose"=true} , name="sendDiffMessage" ,methods={"POST", "GET"})
+     * 
+     */
+    public function sendDiffMessage(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $originUser = $this->getUser();
+            $params = json_decode($request->getContent());
+            $body = $params[0];
+            $date = new \DateTime(str_replace(' ', 'T', $params[1]));
+            $arrayDest = $params[2];
+            foreach ($arrayDest as $d) {
+                $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $d]);
+                $msg = new Message();
+                $msg->setBody($body);
+                $msg->setTime($date);
+                $msg->setOriginUser($originUser);
+                $entityManager->persist($msg);
+                $sent_to = new SentTo();
+                $sent_to->setIdMsg($msg);
+                $sent_to->setIdDestUser($destUser);
+                $sent_to->setRead(false);
+                $entityManager->persist($sent_to);
+                $entityManager->flush();
+            }
+
+            return new Response(json_encode('mensajes de difusion enviado'));
         }
     }
 }

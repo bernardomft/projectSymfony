@@ -14,6 +14,7 @@ function cargarChats() {
     //Añade además el evenlistener de el boton
     document.getElementById('botonEnviar').addEventListener('click', enviarMensaje);
     document.getElementById('addFriends').addEventListener('click',addFriends);
+    document.querySelector('#diffMessage').addEventListener('click', enviarDifusion);
     document.getElementById('divPerf').addEventListener('click',perfil);
     document.getElementById('titulo_').addEventListener('click',perfilP);
     console.log('tu raza gitana ' + currentUser());
@@ -111,6 +112,29 @@ function onClick2() {
         success: function (data) {
             cargarConversacion(JSON.parse(data));
             intervalConversation = setInterval(updateConverGroup,750,group);
+        }
+    });
+}
+
+function enviarDifusion(){
+    var n = window.prompt("how many people do you want to write?");
+    var arrayUsers = [];
+    for (var i = 0; i < n; i++) {
+        arrayUsers.push(window.prompt('Destination user name'));
+    }
+    var msg = window.prompt('What do you want to tell?');
+    var ruta = Routing.generate('sendDiffMessage');
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    $.ajax({
+        type: 'POST',
+        url: ruta,
+        async: true,
+        dataType: 'text',
+        data: JSON.stringify(["***DIFUSSION MSG*** " + msg + " ***DIFUSSION MSG***",date,arrayUsers]),
+        success: function (data) {
+            console.log(JSON.parse(data));
+            //cargarConversacion(JSON.parse(data));
+            //intervalConversation = setInterval(updateConverGroup,750,group);
         }
     });
 }
