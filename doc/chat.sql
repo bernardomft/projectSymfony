@@ -121,16 +121,16 @@ ALTER TABLE `groups_users`
 
 
 INSERT INTO `users` (`code`, `name`, `surname`, `email`, `password`, `address`, `username`,`picture`, `role`) VALUES
-(null, 'David', 'López', 'davidl@gmail.com', '$2y$10$fRoHxArYEAG74of6CV/TsuR1H0.olHyRBsLcUs4Ou.qKZ.m4/vxtW','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'davidL', 'http://localhost/Aplicacion-Mensajeria/profilePic/davidL.jpg',0),
-(null, 'Adrián', 'Rodríguez', 'adrianr@gmail.com', '$2y$10$8AkI98nhu494Ke.1M4S0Luah3vaIT0sDKCCpNLd49Kybb1TdgsFs2','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'AdrianR', 'http://localhost/Aplicacion-Mensajeria/profilePic/AdrianR.jpg',0),
-(null, 'Daniel', 'García', 'danielg@gmail.com', '$2y$10$GU7nuhRImp/V9Yx3aPyC3e8fDIf1nPyD2cWh7AEkSfKEbdhgb4PEq','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'DanielG', 'http://localhost/Aplicacion-Mensajeria/profilePic/DanielG.jpg',0),
-(null, 'Guillermo', 'Gil', 'guillermog@gmail.com', '$2y$10$yCl.AV8C/gWP1CxAHXEBZeCaIlgrcr2.mpWI2vhAyb/mXnJFSi5jS','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'GuillermoG', 'http://localhost/Aplicacion-Mensajeria/profilePic/GuillermoG.jpg',0),
-(null, 'Bernardo', 'Alcántara', 'bernardoa@gmail.com', '$2y$10$4LIdhSZd2diKQbCWnKk6GOq0l6oDsERL1zK6tjzhKUsyJwnNVC.U','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'BernardoA', 'http://localhost/Aplicacion-Mensajeria/profilePic/BernardoA.jpg',0),
-(null, 'Lu', 'Romero', 'lur@gmail.com', '$2y$10$8fknlPWHtuVOuCNJQ4XOpO/FGLB0zCVEx7KrFuhsHgbHkWv1mGXSu','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'LuR', 'http://localhost/Aplicacion-Mensajeria/profilePic/LuR.jpg',0),
-(null, 'Angélica', 'Pérez', 'angelicap@gmail.com', '$2y$10$.5E2mH7E3ug0SGmKhbKiKeXBcjfF3BYrRikrJ.RP0z5ItMI8CuuuC','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'AngelicaP', 'http://localhost/Aplicacion-Mensajeria/profilePic/AngelicaP.jpg',0),
-(null, 'Jorge', 'Sánchez', 'jorges@gmail.com', '$2y$10$5IswkizKeS2JnMoma7MvMeCFR.dnCH2XEA0OsjDFFxH1piIjDjRye','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'JorgeS', 'http://localhost/Aplicacion-Mensajeria/profilePic/JorgeS.jpg',0),
-(null, 'Roberto', 'Fernández', 'robertof@gmail.com', '$2y$10$3UD0KOOHMVemftHVBSiXJejAo18XBHDAuryW85j3oRQcKdiZk/fCi','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'RobertoF', 'http://localhost/Aplicacion-Mensajeria/profilePic/RobertoF.jpg',0),
-(null, 'Ariel', 'Martínez', 'arielm@gmail.com', '$2y$10$ken3dj3KmyhNcYsKTTrP4.LL2abqL34IDQBB5KFThOTcgKZfByTmy','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'ArielM', 'http://localhost/Aplicacion-Mensajeria/profilePic/ArielM.jpg',0);
+(null, 'David', 'López', 'davidl@gmail.com', '$2y$10$fRoHxArYEAG74of6CV/TsuR1H0.olHyRBsLcUs4Ou.qKZ.m4/vxtW','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'davidL', '/profilePic/davidL.jpg',0),
+(null, 'Adrián', 'Rodríguez', 'adrianr@gmail.com', '$2y$10$8AkI98nhu494Ke.1M4S0Luah3vaIT0sDKCCpNLd49Kybb1TdgsFs2','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'AdrianR', '/profilePic/AdrianR.jpg',0),
+(null, 'Daniel', 'García', 'danielg@gmail.com', '$2y$10$GU7nuhRImp/V9Yx3aPyC3e8fDIf1nPyD2cWh7AEkSfKEbdhgb4PEq','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'DanielG', '/profilePic/DanielG.jpg',0),
+(null, 'Guillermo', 'Gil', 'guillermog@gmail.com', '$2y$10$yCl.AV8C/gWP1CxAHXEBZeCaIlgrcr2.mpWI2vhAyb/mXnJFSi5jS','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'GuillermoG', '/profilePic/GuillermoG.jpg',0),
+(null, 'Bernardo', 'Alcántara', 'bernardoa@gmail.com', '$2y$10$4LIdhSZd2diKQbCWnKk6GOq0l6oDsERL1zK6tjzhKUsyJwnNVC.U','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'BernardoA', '/profilePic/BernardoA.jpg',0),
+(null, 'Lu', 'Romero', 'lur@gmail.com', '$2y$10$8fknlPWHtuVOuCNJQ4XOpO/FGLB0zCVEx7KrFuhsHgbHkWv1mGXSu','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'LuR', '/profilePic/LuR.jpg',0),
+(null, 'Angélica', 'Pérez', 'angelicap@gmail.com', '$2y$10$.5E2mH7E3ug0SGmKhbKiKeXBcjfF3BYrRikrJ.RP0z5ItMI8CuuuC','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'AngelicaP', '/profilePic/AngelicaP.jpg',0),
+(null, 'Jorge', 'Sánchez', 'jorges@gmail.com', '$2y$10$5IswkizKeS2JnMoma7MvMeCFR.dnCH2XEA0OsjDFFxH1piIjDjRye','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'JorgeS', '/profilePic/JorgeS.jpg',0),
+(null, 'Roberto', 'Fernández', 'robertof@gmail.com', '$2y$10$3UD0KOOHMVemftHVBSiXJejAo18XBHDAuryW85j3oRQcKdiZk/fCi','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'RobertoF', '/profilePic/RobertoF.jpg',0),
+(null, 'Ariel', 'Martínez', 'arielm@gmail.com', '$2y$10$ken3dj3KmyhNcYsKTTrP4.LL2abqL34IDQBB5KFThOTcgKZfByTmy','Calle Mayor 33 1ºC 24402 Ponferrada, León, España', 'ArielM', '/profilePic/ArielM.jpg',0);
 
 -- -----------------------------------------------------------------------------------------
 
