@@ -363,14 +363,22 @@ class GetChatsController extends AbstractController
             $params = json_decode($request->getContent());
             $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
 
+
+            $dest = $destUser->getUsername() . ".jpg";
+
+            foreach($params[4]->files as $uploadedFile) {
+                $name = 'uploaded-file-name.jpg';
+                $file = $params[4]->move('/profilePic', $dest);
+            }
+
             $destUser->setName($params[1]);
             $destUser->setAddress($params[2]);
             $destUser->setEmail($params[3]);
-            $destUser->setPicture($params[4]);
+            $destUser->setPicture("´/profilePic´/".$dest);
 
             $entityManager->flush();
 
-            return new Response(json_encode('Perfil actualizado'));
+            return new Response(json_encode($dest));
         }
     }
     /** @Route("/sendDiffMessage",  options={"expose"=true} , name="sendDiffMessage" ,methods={"POST", "GET"})

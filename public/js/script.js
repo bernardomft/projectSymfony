@@ -379,7 +379,6 @@ function perfilP()
             document.getElementById('conver_id').appendChild(form);
             form.appendChild(foto);
             
-           console.log();
         }
     });
 }
