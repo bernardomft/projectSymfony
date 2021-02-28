@@ -27,8 +27,6 @@ function cargarChats() {
         success: function (data) {
             deleteChats();
             createChats(JSON.parse(data));
-            //console.log(JSON.parse(data));
-            //console.log('respuesta recibida ' + data);
             cargarGroups();
         }
     });
@@ -74,8 +72,7 @@ function onClick() {
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var destUser = this.id.substring(5, this.id.length);
-    //userGlobal = user;
-    updateRead(destUser); //linea comentada hasta solucionar el problema
+    updateRead(destUser); 
     document.getElementById('divPerf').innerHTML = '' + destUser;
     document.getElementById(this.id).style.color = '#FFFFFF';
     var ruta = Routing.generate('GetConversation');
@@ -99,7 +96,6 @@ function onClick2() {
     while (document.getElementById('conver_id').firstChild)
         document.getElementById('conver_id').removeChild(document.getElementById('conver_id').firstChild);
     var group = this.id.substring(6, this.id.length);
-    //updateRead(destUser); //linea comentada hasta solucionar el problema
     document.getElementById('divPerf').innerHTML = '' + group;
     document.getElementById(this.id).style.color = '#FFFFFF';
     var ruta = Routing.generate('GetConversationGroup');
@@ -133,9 +129,10 @@ function enviarDifusion(){
         data: JSON.stringify(["***DIFUSSION MSG*** " + msg + " ***DIFUSSION MSG***",date,arrayUsers]),
         success: function (data) {
             console.log(JSON.parse(data));
-            //cargarConversacion(JSON.parse(data));
-            //intervalConversation = setInterval(updateConverGroup,750,group);
-        }
+        },
+        error : function() {
+            alert('Algún usuario que has introducido no existe. Vuelve a empezar por favor');
+        },
     });
 }
 
@@ -171,7 +168,6 @@ function updateConverGroup(group) {
 //envia un mensaje
 function enviarMensaje() {
     var destUser = document.getElementById('divPerf').innerHTML;
-    //console.log(destUser);
     var ruta = Routing.generate('sendMessage');
     var body = document.getElementById('input_msg').value;
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -235,7 +231,10 @@ function addFriends() {
         data: JSON.stringify([username, date]),
         success: function (data) {
             alert('Usuario creado correectamente');
-        }
+        },
+        error : function() {
+            alert('El usuario introducido no existe');
+        },
     });
 }
 
@@ -280,7 +279,6 @@ function perfil()
             form.id = 'formImg';
             form.method = 'post';
             form.enctype = 'multipart/form-data';
-            
             var foto = document.createElement('input');
             foto.setAttribute("type", "file");
             foto.name = 'myfile';
@@ -302,10 +300,7 @@ function perfil()
             document.getElementById('conver_id').appendChild(p1);
             document.getElementById('conver_id').appendChild(label2);
             document.getElementById('conver_id').appendChild(p2);
-            //document.getElementById('conver_id').appendChild(updateBttn);
             document.getElementById('conver_id').appendChild(form);
-            //form.appendChild(foto);
-            
            console.log();
         }
     });
@@ -350,25 +345,21 @@ function perfilP()
             updateBttn.addEventListener('click', updateInfo);
             updateBttn.innerHTML = 'Update';
             var form = document.createElement('form');
-            form.action = 'GetChatsController.php';
             form.id = 'formImg';
             form.method = 'post';
             form.enctype = 'multipart/form-data';
-            //
             var foto = document.createElement('input');
             foto.setAttribute("type", "file");
             foto.name = 'myfile';
             foto.id = 'myfile';
             foto.accept = 'image/*';
             foto.style.float = 'left';
-        
             var img = document.createElement('img');
             img.src = arrayTmp[3];
             img.setAttribute('url', arrayTmp[3]);
             img.style.width = '100px';
             img.style.height = '100px';
             img.style.float = 'left';
-           
             document.getElementById('conver_id').appendChild(img);
             document.getElementById('conver_id').appendChild(label);
             document.getElementById('conver_id').appendChild(p);
@@ -379,7 +370,6 @@ function perfilP()
             document.getElementById('conver_id').appendChild(updateBttn);
             document.getElementById('conver_id').appendChild(form);
             form.appendChild(foto);
-            
         }
     });
 }
@@ -388,7 +378,6 @@ function updateInfo() {
     var name = document.getElementById('name').value;
     var address = document.getElementById('address').value;
     var mail = document.getElementById('mail').value;
-    var foto = document.getElementById('myfile').value;
     document.getElementById('formImg').submit();
     var destUser = document.getElementById('divPerf').innerHTML
     var ruta = Routing.generate('updateProfile');
@@ -403,6 +392,7 @@ function updateInfo() {
         }
     });
 }
+
 
 
 /* FIN PETICIONES AJAX */

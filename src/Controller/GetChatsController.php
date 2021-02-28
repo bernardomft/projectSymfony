@@ -9,21 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\SentTo;
 use App\Entity\Users;
-use App\Entity\Message;
 use App\Entity\Groups;
-use Symfony\Component\Validator\Constraints\IsFalse;
-use Doctrine\ORM\Mapping as ORM;
-
-$imprimir=$_FILES["myfile"]["tmp_name"];
-$user=$_REQUEST["destUser"];
-
-movefoto($user,$imprimir);
-
-function movefoto($user,$path)
-{
-    $dest="/profilePic".$user;
-    $res = move_uploaded_file($path,$dest);
-}
 
 class GetChatsController extends AbstractController
 {
@@ -67,56 +53,11 @@ class GetChatsController extends AbstractController
                 if (!(in_array($a->getUsername(), $arrayTmp)))
                     array_push($arrayTmp, $a->getUsername());
             }
-            /*$code_user = $this->getUser()->getCode();
-            $entityManager = $this->getDoctrine()->getManager();
-            $query = $entityManager->createQuery("SELECT `users`.`username`, `sent_to`.`id_dest_user` from projectSymfony/Model/User 
-                                    INNER JOIN `message` on `users`.`code` = `message`.`origin_user_id`
-                                    INNER JOIN `sent_to` on `sent_to`.`id_msg` = `message`.`id_msg`
-                                    where `sent_to`.`id_dest_user` like :code
-                                    group by `username`");
-            $query->setParameter('code', $code_user);
-            $query->execute();
-            $dest_users = $query->getResult();*/
             return new Response(json_encode($arrayTmp));
         }
     }
 
-    /**
-     * @Route("/CheckReadChats",  options={"expose"=true} , name="CheckReadChats" ,methods={"POST", "GET"})
-     * 
-     */
-    public function CheckReadChats(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $user = $this->getUser()->getCode();
-            $dest = json_decode($request->getContent());
-            $repository = $this->getDoctrine()->getRepository(Users::class);
-            $destino = $repository->findBy(array('username' => $dest));
-            $arrayTmp = [];
-            $arrayTmp2 = [];
-            foreach ($destino as $a) {
-                array_push($arrayTmp, $a->getMessages());
-            }
-            foreach ($arrayTmp as $a) {
-                foreach ($a as $b) {
-                    array_push($arrayTmp2, $b->getSentTo());
-                }
-            }
-            $arrayTmp = [];
-            foreach ($arrayTmp2 as $a) {
-                foreach ($a as $b) {
-                    if ($b->getIdDestUser()->getCode() == $user)
-                        array_push($arrayTmp, $b->getRead());
-                }
-            }
-            foreach ($arrayTmp as $a) {
-                if (!$a)
-                    return new Response(json_encode('false'));
-            }
-
-            return new Response(json_encode('true'));
-        }
-    }
+    
 
     /**
      * @Route("/GetConversation",  options={"expose"=true} , name="GetConversation" ,methods={"POST", "GET"})
@@ -190,133 +131,6 @@ class GetChatsController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/UpdateRead",  options={"expose"=true} , name="UpdateRead" ,methods={"POST", "GET"})
-     * 
-     */
-    public function UpdateRead(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $user = $this->getUser();
-            $tmp2 = [];
-            $param = json_decode($request->getContent());
-            $entityManager = $this->getDoctrine()->getManager();
-            $destUser = $entityManager->getRepository(Users::class)->findBy(['username' => $param]);
-            $messages_dest_user = $destUser[0]->getMessages();
-            foreach ($messages_dest_user as $m) {
-                $tmp = $m->getSentTo();
-                foreach ($tmp as $t) {
-                    if (
-                        $t->getIdDestUser()->getCode() === $user->getCode() &&
-                        $t->getRead() == 0
-                    ) {
-                        $t->setRead(true);
-                        $entityManager->flush();
-                        array_push($tmp2, $t->getRead());
-                    }
-                }
-            }
-            return new Response(json_encode($tmp2));
-        }
-    }
-
-    /**
-     * @Route("/addFriends",  options={"expose"=true} , name="addFriends" ,methods={"POST", "GET"})
-     * 
-     */
-    public function addFriend(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $param = json_decode($request->getContent());
-            $message = new Message();
-            $message2 = new Message();
-            $user = $this->getUser();
-            $destUser = $em->getRepository(Users::class)->findOneBy(['username' => $param[0]]);
-            $fecha = new \DateTime(str_replace(' ', 'T', $param[1]));
-
-
-            $message->setBody('asdfgh1234');
-            $message->setTime($fecha);
-            $message->setOriginUser($user);
-            $em->persist($message);
-            $sent_to = new SentTo();
-            $sent_to->setIdMsg($message);
-            $sent_to->setIdDestUser($destUser);
-            $sent_to->setRead(false);
-            $em->persist($sent_to);
-
-
-
-
-            $message2->setBody('asdfgh1234');
-            $message2->setTime($fecha);
-            $message2->setOriginUser($destUser);
-            $em->persist($message2);
-            $sent_to2 = new SentTo();
-            $sent_to2->setIdMsg($message2);
-            $sent_to2->setIdDestUser($user);
-            $sent_to2->setRead(false);
-            $em->persist($sent_to2);
-
-
-            $em->flush();
-        }
-        return new Response(json_encode($user->getCode()));
-    }
-
-    /**
-     * @Route("/sendMessage",  options={"expose"=true} , name="sendMessage" ,methods={"POST", "GET"})
-     * 
-     */
-    public function sendMessage(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $params = json_decode($request->getContent());
-            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
-            $params[2] = new \DateTime(str_replace(' ', 'T', $params[2]));
-            $msg = new Message();
-            $msg->setBody($params[1]);
-            $msg->setTime($params[2]);
-            $msg->setOriginUser($this->getUser());
-            $entityManager->persist($msg);
-            $sent_to = new SentTo();
-            $sent_to->setIdMsg($msg);
-            $sent_to->setIdDestUser($destUser);
-            $sent_to->setRead(false);
-            $entityManager->persist($sent_to);
-            $entityManager->flush();
-            return new Response(json_encode('mensaje enviado'));
-        }
-    }
-
-    /**
-     * @Route("/sendMessageGroup",  options={"expose"=true} , name="sendMessageGroup" ,methods={"POST", "GET"})
-     * 
-     */
-    public function sendMessageGroup(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $params = json_decode($request->getContent());
-            $group_name = $entityManager->getRepository(Groups::class)->findOneBy(['name' => $params[0]]);
-            $params[2] = new \DateTime(str_replace(' ', 'T', $params[2]));
-            $msg = new Message();
-            $msg->setBody($params[1]);
-            $msg->setTime($params[2]);
-            $msg->setOriginUser($this->getUser());
-            $entityManager->persist($msg);
-            $group = new Groups();
-            $group->setIdMsg($msg);
-            $group->setIdUser($this->getUser()->getCode());
-            $group->setName($params[0]);
-            $entityManager->persist($group);
-            $entityManager->flush();
-            return new Response(json_encode('mensaje enviado'));
-        }
-    }
 
     /**
      * @Route("/GetConversationGroup",  options={"expose"=true} , name="GetConversationGroup" ,methods={"POST", "GET"})
@@ -339,99 +153,7 @@ class GetChatsController extends AbstractController
             }
             return new Response(json_encode($arrayMsg));
         }
-    }
-
-    /**
-     * @Route("/showProfile",  options={"expose"=true} , name="showProfile" ,methods={"POST", "GET"})
-     * 
-     */
-    public function showProfile(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $params = json_decode($request->getContent());
-            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params]);
-            $arrayUser = [];
-            array_push($arrayUser, $destUser->getName());
-            array_push($arrayUser, $destUser->getAddress());
-            array_push($arrayUser, $destUser->getEmail());
-            array_push($arrayUser, $destUser->getPicture());
-
-
-
-            return new Response(json_encode($arrayUser));
-        }
-    }
-
-    /**
-     * @Route("/updateProfile",  options={"expose"=true} , name="updateProfile" ,methods={"POST", "GET"})
-     * 
-     */
-    public function updateProfile(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $params = json_decode($request->getContent());
-            $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
-
-
-            $dest = "/".$destUser->getUsername() . ".jpg";
-            
-            
-            /*
-            // retrieve uploaded files
-            $files = $params[4]->files;
-
-            // and store the file
-            $uploadedFile = $files->get('archivo');
-            $file = $uploadedFile->move("´/profilePic´/", $dest);
-
-           
-            foreach($params[4]->files as $uploadedFile) {
-                $name = 'uploaded-file-name.jpg';
-                $file = $params[4]->move('/profilePic', $dest);
-            }
-            */
-            $destUser->setName($params[1]);
-            $destUser->setAddress($params[2]);
-            $destUser->setEmail($params[3]);
-            //$destUser->setPicture("´/profilePic´/".$dest);
-
-            $entityManager->flush();
-
-            return new Response(json_encode($params[4]));
-        }
-    }
-    /** @Route("/sendDiffMessage",  options={"expose"=true} , name="sendDiffMessage" ,methods={"POST", "GET"})
-     * 
-     */
-    public function sendDiffMessage(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $originUser = $this->getUser();
-            $params = json_decode($request->getContent());
-            $body = $params[0];
-            $date = new \DateTime(str_replace(' ', 'T', $params[1]));
-            $arrayDest = $params[2];
-            foreach ($arrayDest as $d) {
-                $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $d]);
-                $msg = new Message();
-                $msg->setBody($body);
-                $msg->setTime($date);
-                $msg->setOriginUser($originUser);
-                $entityManager->persist($msg);
-                $sent_to = new SentTo();
-                $sent_to->setIdMsg($msg);
-                $sent_to->setIdDestUser($destUser);
-                $sent_to->setRead(false);
-                $entityManager->persist($sent_to);
-                $entityManager->flush();
-            }
-
-            return new Response(json_encode('mensajes de difusion enviado'));
-        }
-    }
+    } 
 }
 
 
