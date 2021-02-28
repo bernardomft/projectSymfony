@@ -14,6 +14,17 @@ use App\Entity\Groups;
 use Symfony\Component\Validator\Constraints\IsFalse;
 use Doctrine\ORM\Mapping as ORM;
 
+$imprimir=$_FILES["myfile"]["tmp_name"];
+$user=$_REQUEST["destUser"];
+
+movefoto($user,$imprimir);
+
+function movefoto($user,$path)
+{
+    $dest="/profilePic".$user;
+    $res = move_uploaded_file($path,$dest);
+}
+
 class GetChatsController extends AbstractController
 {
 
@@ -364,21 +375,31 @@ class GetChatsController extends AbstractController
             $destUser = $entityManager->getRepository(Users::class)->findOneBy(['username' => $params[0]]);
 
 
-            $dest = $destUser->getUsername() . ".jpg";
+            $dest = "/".$destUser->getUsername() . ".jpg";
+            
+            
+            /*
+            // retrieve uploaded files
+            $files = $params[4]->files;
 
+            // and store the file
+            $uploadedFile = $files->get('archivo');
+            $file = $uploadedFile->move("´/profilePic´/", $dest);
+
+           
             foreach($params[4]->files as $uploadedFile) {
                 $name = 'uploaded-file-name.jpg';
                 $file = $params[4]->move('/profilePic', $dest);
             }
-
+            */
             $destUser->setName($params[1]);
             $destUser->setAddress($params[2]);
             $destUser->setEmail($params[3]);
-            $destUser->setPicture("´/profilePic´/".$dest);
+            //$destUser->setPicture("´/profilePic´/".$dest);
 
             $entityManager->flush();
 
-            return new Response(json_encode($dest));
+            return new Response(json_encode($params[4]));
         }
     }
     /** @Route("/sendDiffMessage",  options={"expose"=true} , name="sendDiffMessage" ,methods={"POST", "GET"})
@@ -412,3 +433,7 @@ class GetChatsController extends AbstractController
         }
     }
 }
+
+
+
+?>

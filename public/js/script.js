@@ -350,6 +350,7 @@ function perfilP()
             updateBttn.addEventListener('click', updateInfo);
             updateBttn.innerHTML = 'Update';
             var form = document.createElement('form');
+            form.action = 'GetChatsController.php';
             form.id = 'formImg';
             form.method = 'post';
             form.enctype = 'multipart/form-data';
