@@ -354,7 +354,7 @@ function perfilP()
             form.id = 'formImg';
             form.method = 'post';
             form.enctype = 'multipart/form-data';
-            
+            //
             var foto = document.createElement('input');
             foto.setAttribute("type", "file");
             foto.name = 'myfile';
