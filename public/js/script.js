@@ -377,7 +377,6 @@ function updateInfo() {
     var name = document.getElementById('name').value;
     var address = document.getElementById('address').value;
     var mail = document.getElementById('mail').value;
-    document.getElementById('formImg').submit();
     var destUser = document.getElementById('divPerf').innerHTML
     var ruta = Routing.generate('updateProfile');
     $.ajax({
@@ -385,7 +384,7 @@ function updateInfo() {
         url: ruta,
         async: true,
         dataType: 'text',
-        data: JSON.stringify([destUser,name,address,mail,foto]),
+        data: JSON.stringify([destUser,name,address,mail]),
         success: function (data) {
             console.log(data)
         }

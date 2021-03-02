@@ -83,8 +83,6 @@ class FuncionalityController extends AbstractController
             $destUser->setAddress($params[2]);
             $destUser->setEmail($params[3]);
             $entityManager->flush();
-            $dest = "profilePic/".$destUser->getUsername() . ".jpg";
-            move_uploaded_file($params[4],$dest);
             return new Response(json_encode($params[4]));
         }
     }
