@@ -17,7 +17,6 @@ function cargarChats() {
     document.querySelector('#diffMessage').addEventListener('click', enviarDifusion);
     document.getElementById('divPerf').addEventListener('click',perfil);
     document.getElementById('titulo_').addEventListener('click',perfilP);
-    console.log('tu raza gitana ' + currentUser());
     var ruta = Routing.generate('GetChats');
     $.ajax({
         type: 'POST',
@@ -230,10 +229,10 @@ function addFriends() {
         dataType: 'text',
         data: JSON.stringify([username, date]),
         success: function (data) {
-            alert('Usuario creado correectamente');
+            alert('Usuario agregado');
         },
         error : function() {
-            alert('El usuario introducido no existe');
+            console.log('El usuario introducido no existe');
         },
     });
 }
